@@ -29,7 +29,7 @@ provider "aws" {
 resource "aws_amplify_app" "coffeetracker" {
   name       = "coffeetracker"
   repository = var.repository_url
-  build_spec = <<EOF
+  build_spec = <<-EOT
 version: 1
 env:
   variables:
@@ -50,7 +50,7 @@ frontend:
   cache:
     paths:
       - node_modules/**/*
-  EOF
+  EOT
 
   access_token = var.gh-access-token
 
