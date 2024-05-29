@@ -39,9 +39,10 @@ module "coffeetracker-backend" {
 }
 
 module "coffeetracker-frontend" {
-  source          = "./coffeetracker_frontend/infrastructure/"
-  region          = var.region
-  gh-access-token = var.gh-access-token
-  api_gw_endpoint = module.coffeetracker-backend.api_gw_endpoint
-  repository_url  = var.repository_url
+  source                   = "./coffeetracker_frontend/infrastructure/"
+  region                   = var.region
+  gh-access-token          = var.gh-access-token
+  api_gw_endpoint          = module.coffeetracker-backend.api_gw_endpoint
+  repository_url           = var.repository_url
+  amplify_auth_credentials = var.amplify_auth_credentials
 }

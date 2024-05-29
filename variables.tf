@@ -35,3 +35,7 @@ variable "gh-access-token" {
 variable "repository_url" {
   type = string
 }
+
+variable "amplify_auth_credentials" {
+  type = string
+}
