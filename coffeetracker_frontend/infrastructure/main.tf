@@ -47,6 +47,7 @@ frontend:
         - npm install
     build:
       commands:
+        - cd coffeetracker_frontend
         - npm run build
   artifacts:
     baseDirectory: dist
