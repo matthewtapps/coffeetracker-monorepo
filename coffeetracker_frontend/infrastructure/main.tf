@@ -66,13 +66,8 @@ frontend:
     target = "/index.html"
   }
 
-  enable_basic_auth      = true
-  basic_auth_credentials = base64encode("admin:coffeetrackerpassword")
-
-  enable_auto_branch_creation   = true
-  auto_branch_creation_patterns = ["main"]
-  auto_branch_creation_config {
-    enable_auto_build = true
-  }
-  enable_branch_auto_build = true
+  enable_basic_auth           = true
+  basic_auth_credentials      = base64encode("admin:coffeetrackerpassword")
+  enable_auto_branch_creation = true
+  enable_branch_auto_build    = true
 }
