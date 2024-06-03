@@ -48,7 +48,7 @@ resource "aws_iam_role_policy" "codepipeline_policy" {
       "Resource": [
         "${aws_codebuild_project.app.arn}"
       ]
-    },
+    }
   ]
 }
 EOF
