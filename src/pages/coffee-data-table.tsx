@@ -1,10 +1,12 @@
 import React from "react";
 import { BaseContainer } from "@/components/base-container";
-import { getDummyData } from "../test/dummyData";
 import { columns } from "@/components/coffee-data-table/columns";
 import { DataTable } from "@/components/coffee-data-table/data-table";
+import { useGetShotsQuery } from "@/app/api/api";
+import Spinner from "@/components/loadingSpinner";
 
 export default function CoffeeDataTablePage() {
+  const { data, isError, isLoading, isSuccess } = useGetShotsQuery();
   const [isDesktop, setDesktop] = React.useState(window.innerWidth > 1350);
 
   const updateMedia = () => {
@@ -16,13 +18,19 @@ export default function CoffeeDataTablePage() {
     return () => window.removeEventListener("resize", updateMedia);
   });
 
+  if (isError) {
+    return <div>Something went wrong...</div>;
+  }
+
   return (
     <BaseContainer route="shotTable">
-      <DataTable
-        columns={columns}
-        data={getDummyData()}
-        isDesktop={isDesktop}
-      />
+      {isLoading ? (
+        <Spinner />
+      ) : (
+        isSuccess && (
+          <DataTable columns={columns} data={data} isDesktop={isDesktop} />
+        )
+      )}
     </BaseContainer>
   );
 }
