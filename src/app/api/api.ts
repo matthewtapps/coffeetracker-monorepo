@@ -4,7 +4,7 @@ import { Coffee } from "@/components/coffee-data-table/columns";
 export const coffeeApi = createApi({
   reducerPath: "coffeeApi",
   baseQuery: fetchBaseQuery({
-    baseUrl: import.meta.env.REACT_APP_API_ENDPOINT,
+    baseUrl: import.meta.env.VITE_API_ENDPOINT,
   }),
   tagTypes: ["Coffee"],
   endpoints: (build) => ({
@@ -14,7 +14,7 @@ export const coffeeApi = createApi({
     }),
     addShot: build.mutation<Coffee, Partial<Coffee>>({
       query: (body) => ({
-        url: "/espressoshots",
+        url: "espressoshots",
         method: "POST",
         body,
       }),
