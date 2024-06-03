@@ -16,6 +16,15 @@ resource "aws_lambda_function" "post" {
   role             = aws_iam_role.lambda_exec.arn
 }
 
+resource "aws_lambda_function" "get-latest" {
+  function_name    = "get-latest"
+  filename         = "lambdas/get-latest/target/lambda/get-latest/bootstrap.zip"
+  source_code_hash = filebase64sha256("lambdas/get-latest/target/lambda/get-latest/bootstrap.zip")
+  handler          = "bootstrap"
+  runtime          = "provided.al2023"
+  role             = aws_iam_role.lambda_exec.arn
+}
+
 # IAM role which dictates what other AWS services the Lambda function
 # may access.
 resource "aws_iam_role" "lambda_exec" {

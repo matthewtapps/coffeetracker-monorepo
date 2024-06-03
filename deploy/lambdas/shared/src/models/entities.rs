@@ -13,6 +13,8 @@ pub struct EspressoShot {
     weight_in_g: f32,
     weight_out_g: f32,
     rating: i32,
+    acidity_bitterness: i32,
+    muddy_watery: i32,
     notes: String,
     updated_at: i64,
 }
@@ -28,6 +30,8 @@ impl EspressoShot {
         weight_in_g: f32,
         weight_out_g: f32,
         rating: i32,
+        acidity_bitterness: i32,
+        muddy_watery: i32,
         notes: String,
         updated_at: i64,
     ) -> EspressoShot {
@@ -41,6 +45,8 @@ impl EspressoShot {
             weight_in_g,
             weight_out_g,
             rating,
+            acidity_bitterness,
+            muddy_watery,
             notes,
             updated_at,
         }
@@ -55,6 +61,8 @@ impl EspressoShot {
         self.weight_in_g = dto.weight_in_g;
         self.weight_out_g = dto.weight_out_g;
         self.rating = dto.rating;
+        self.acidity_bitterness = dto.acidity_bitterness;
+        self.muddy_watery = dto.muddy_watery;
         self.notes = dto.notes;
         self.updated_at = chrono::Utc::now().timestamp();
     }
@@ -93,6 +101,14 @@ impl EspressoShot {
 
     pub fn get_rating(&self) -> i32 {
         self.rating
+    }
+
+    pub fn get_acidity_bitterness(&self) -> i32 {
+        self.acidity_bitterness
+    }
+
+    pub fn get_muddy_watery(&self) -> i32 {
+        self.muddy_watery
     }
 
     pub fn get_notes(&self) -> String {

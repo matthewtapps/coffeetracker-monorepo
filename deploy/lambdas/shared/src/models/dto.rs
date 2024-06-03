@@ -24,6 +24,8 @@ pub struct EspressoShotViewDto {
     pub weight_in_g: f32,
     pub weight_out_g: f32,
     pub rating: i32,
+    pub acidity_bitterness: i32,
+    pub muddy_watery: i32,
     pub notes: String,
     #[serde(serialize_with = "serialize_dt")]
     pub updated_at: DateTime<Utc>,
@@ -41,6 +43,8 @@ pub struct EspressoShotCreateDto {
     pub weight_in_g: f32,
     pub weight_out_g: f32,
     pub rating: i32,
+    pub acidity_bitterness: i32,
+    pub muddy_watery: i32,
     pub notes: String,
 }
 
@@ -57,6 +61,8 @@ pub struct EspressoShotPutDto {
     pub weight_in_g: f32,
     pub weight_out_g: f32,
     pub rating: i32,
+    pub acidity_bitterness: i32,
+    pub muddy_watery: i32,
     pub notes: String,
 }
 
@@ -86,6 +92,8 @@ impl Into<EspressoShot> for EspressoShotCreateDto {
             self.weight_in_g,
             self.weight_out_g,
             self.rating,
+            self.acidity_bitterness,
+            self.muddy_watery,
             self.notes,
             timestamp,
         )
@@ -108,6 +116,8 @@ impl From<EspressoShot> for EspressoShotViewDto {
             weight_in_g: value.get_weight_in_g(),
             weight_out_g: value.get_weight_out_g(),
             rating: value.get_rating(),
+            acidity_bitterness: value.get_acidity_bitterness(),
+            muddy_watery: value.get_muddy_watery(),
             notes: value.get_notes(),
             updated_at,
         }

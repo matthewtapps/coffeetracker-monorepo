@@ -36,6 +36,14 @@ pub async fn create_item(
             "rating".to_string(),
             AttributeValue::N(item.get_rating().to_string()),
         )
+        .item(
+            "acidity_bitterness".to_string(),
+            AttributeValue::N(item.get_acidity_bitterness().to_string()),
+        )
+        .item(
+            "muddy_watery".to_string(),
+            AttributeValue::N(item.get_muddy_watery().to_string()),
+        )
         .item("notes".to_string(), AttributeValue::S(item.get_notes()))
         .item(
             "updated_at".to_string(),

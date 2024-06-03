@@ -14,3 +14,11 @@ resource "aws_lambda_permission" "lambda_permission_create_todo" {
   # More: http://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-control-access-using-iam-policies-to-invoke-api.html
   source_arn = "${aws_api_gateway_rest_api.app.execution_arn}/*/POST/espressoshots"
 }
+
+resource "aws_lambda_permission" "lambda_permission_get-latest" {
+  statement_id  = "AllowExecutionFromAPIGatewayUCI"
+  action        = "lambda:InvokeFunction"
+  function_name = aws_lambda_function.get-latest.function_name
+  principal     = "apigateway.amazonaws.com"
+  source_arn    = "${aws_api_gateway_rest_api.app.execution_arn}/*/GET/espressoshots/latest"
+}

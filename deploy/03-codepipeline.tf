@@ -3,9 +3,9 @@ resource "aws_codepipeline" "app" {
   role_arn = aws_iam_role.codepipeline_role.arn
   depends_on = [
     aws_api_gateway_deployment.app,
-    aws_cognito_user_pool.app_user_pool,
-    aws_cognito_user_pool_client.app_user_pool_client,
-    aws_cognito_identity_pool.app_identity_pool
+    # aws_cognito_user_pool.app_user_pool,
+    # aws_cognito_user_pool_client.app_user_pool_client,
+    # aws_cognito_identity_pool.app_identity_pool
   ]
 
   artifact_store {
@@ -28,7 +28,7 @@ resource "aws_codepipeline" "app" {
       configuration = {
         Owner      = var.github_username
         Repo       = var.github_project_name
-        Branch     = "master"
+        Branch     = "main"
         OAuthToken = var.github_token
       }
     }
@@ -66,23 +66,6 @@ resource "aws_codepipeline" "app" {
       configuration = {
         BucketName = aws_s3_bucket.www_bucket.bucket
         Extract    = "true"
-      }
-    }
-  }
-
-  stage {
-    name = "Invalidate-Cloudfront-Cache"
-
-    action {
-      name            = "Invalidate-Cloudfront-cache"
-      category        = "Build"
-      owner           = "AWS"
-      provider        = "CodeBuild"
-      input_artifacts = ["source_output"]
-      version         = "1"
-
-      configuration = {
-        ProjectName = aws_codebuild_project.invalidate_cache.name
       }
     }
   }
