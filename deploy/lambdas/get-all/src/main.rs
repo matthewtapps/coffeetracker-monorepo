@@ -24,6 +24,7 @@ async fn handler(
     let response = Response::builder()
         .status(StatusCode::OK)
         .header("Content-Type", "application/json")
+        .header("Access-Control-Allow-Origin", "*")
         .body(serde_json::to_string(&found_items.unwrap()).unwrap())
         .map_err(Box::new)?;
     Ok(response)
