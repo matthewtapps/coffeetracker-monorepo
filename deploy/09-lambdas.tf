@@ -82,6 +82,39 @@ resource "aws_apigatewayv2_route" "get-latest" {
   target    = "integrations/${aws_apigatewayv2_integration.get-latest.id}"
 }
 
+# cors-allow Lambda, Logs, API gateway integration, API Gateway reoute
+resource "aws_lambda_function" "cors-allow" {
+  function_name    = "cors-allow"
+  filename         = "lambdas/cors-allow/target/lambda/cors-allow/bootstrap.zip"
+  source_code_hash = filebase64sha256("lambdas/cors-allow/target/lambda/cors-allow/bootstrap.zip")
+  handler          = "bootstrap"
+  runtime          = "provided.al2023"
+  role             = aws_iam_role.lambda_exec.arn
+  environment {
+    variables = {
+      ALLOWED_ORIGINS = aws_amplify_app.coffeetracker.default_domain
+    }
+  }
+}
+
+resource "aws_cloudwatch_log_group" "cors-allow" {
+  name              = "/aws/lambda/${aws_lambda_function.cors-allow.function_name}"
+  retention_in_days = 7
+}
+
+resource "aws_apigatewayv2_integration" "cors-allow" {
+  api_id             = aws_apigatewayv2_api.lambda.id
+  integration_type   = "AWS_PROXY"
+  integration_method = "POST"
+  integration_uri    = aws_lambda_function.cors-allow.invoke_arn
+}
+
+resource "aws_apigatewayv2_route" "cors-allow" {
+  api_id    = aws_apigatewayv2_api.lambda.id
+  route_key = "OPTIONS /espressoshots"
+  target    = "integrations/${aws_apigatewayv2_integration.cors-allow.id}"
+}
+
 # IAM role which dictates what other AWS services the Lambda function
 # may access.
 resource "aws_iam_role" "lambda_exec" {
