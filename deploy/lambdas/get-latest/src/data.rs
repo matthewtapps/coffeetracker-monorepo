@@ -11,7 +11,7 @@ pub async fn get_latest_item(
         .scan()
         .limit(1)
         .table_name(table_name)
-        .index_name("shot_date")
+        .index_name("shot_date_index")
         .send()
         .await?;
 
