@@ -1,5 +1,5 @@
 use crate::models::entities::EspressoShot;
-use chrono::{DateTime, NaiveDateTime, TimeZone, Utc};
+use chrono::{DateTime, Utc};
 use serde::{Deserialize, Deserializer, Serialize, Serializer};
 use svix_ksuid::{Ksuid, KsuidLike};
 
@@ -21,8 +21,9 @@ pub struct EspressoShotViewDto {
     #[serde(serialize_with = "serialize_dt")]
     pub shot_date: DateTime<Utc>,
     pub grind_setting: i32,
-    pub weight_in_g: f32,
-    pub weight_out_g: f32,
+    pub weight_in_grams: f32,
+    pub weight_out_grams: f32,
+    pub brew_time_seconds: i32,
     pub rating: i32,
     pub acidity_bitterness: i32,
     pub muddy_watery: i32,
@@ -32,6 +33,7 @@ pub struct EspressoShotViewDto {
 }
 
 #[derive(Debug, Deserialize)]
+#[serde(rename_all = "camelCase")]
 pub struct EspressoShotCreateDto {
     pub beans: String,
     pub roaster: String,
@@ -40,8 +42,9 @@ pub struct EspressoShotCreateDto {
     #[serde(deserialize_with = "deserialize_dt_opt", default)]
     pub shot_date: Option<DateTime<Utc>>,
     pub grind_setting: i32,
-    pub weight_in_g: f32,
-    pub weight_out_g: f32,
+    pub weight_in_grams: f32,
+    pub weight_out_grams: f32,
+    pub brew_time_seconds: i32,
     pub rating: i32,
     pub acidity_bitterness: i32,
     pub muddy_watery: i32,
@@ -49,6 +52,7 @@ pub struct EspressoShotCreateDto {
 }
 
 #[derive(Debug, Deserialize)]
+#[serde(rename_all = "camelCase")]
 pub struct EspressoShotPutDto {
     pub id: String,
     pub beans: String,
@@ -58,8 +62,9 @@ pub struct EspressoShotPutDto {
     #[serde(deserialize_with = "deserialize_dt")]
     pub shot_date: DateTime<Utc>,
     pub grind_setting: i32,
-    pub weight_in_g: f32,
-    pub weight_out_g: f32,
+    pub weight_in_grams: f32,
+    pub weight_out_grams: f32,
+    pub brew_time_seconds: i32,
     pub rating: i32,
     pub acidity_bitterness: i32,
     pub muddy_watery: i32,
@@ -80,17 +85,18 @@ impl Into<EspressoShot> for EspressoShotCreateDto {
         let ksuid = Ksuid::new(None, None);
         let dt = Utc::now();
         let timestamp: i64 = dt.timestamp();
-        let shot_timestamp: i64 = self.shot_date.unwrap_or_else(|| dt).timestamp();
+        let shot_date: i64 = self.shot_date.unwrap_or_else(|| dt).timestamp();
 
         EspressoShot::new(
             ksuid.to_string(),
             self.beans,
             self.roaster,
             self.roast_date.timestamp(),
-            shot_timestamp,
+            shot_date,
             self.grind_setting,
-            self.weight_in_g,
-            self.weight_out_g,
+            self.weight_in_grams,
+            self.weight_out_grams,
+            self.brew_time_seconds,
             self.rating,
             self.acidity_bitterness,
             self.muddy_watery,
@@ -113,8 +119,9 @@ impl From<EspressoShot> for EspressoShotViewDto {
             roast_date,
             shot_date,
             grind_setting: value.get_grind_setting(),
-            weight_in_g: value.get_weight_in_g(),
-            weight_out_g: value.get_weight_out_g(),
+            weight_in_grams: value.get_weight_in_grams(),
+            weight_out_grams: value.get_weight_out_grams(),
+            brew_time_seconds: value.get_brew_time_seconds(),
             rating: value.get_rating(),
             acidity_bitterness: value.get_acidity_bitterness(),
             muddy_watery: value.get_muddy_watery(),
@@ -136,9 +143,9 @@ where
     D: Deserializer<'de>,
 {
     let s = String::deserialize(deserializer)?;
-    NaiveDateTime::parse_from_str(&s, "%+")
+    DateTime::parse_from_rfc3339(&s)
         .map_err(serde::de::Error::custom)
-        .map(|dt| TimeZone::from_utc_datetime(&Utc, &dt))
+        .map(|dt| dt.with_timezone(&Utc))
 }
 
 pub fn deserialize_dt_opt<'de, D>(deserializer: D) -> Result<Option<DateTime<Utc>>, D::Error>
@@ -147,9 +154,9 @@ where
 {
     let s: Option<String> = Option::deserialize(deserializer)?;
     if let Some(s) = s {
-        let dt = NaiveDateTime::parse_from_str(&s, "%+")
+        let dt = DateTime::parse_from_rfc3339(&s)
             .map_err(serde::de::Error::custom)
-            .map(|dt| TimeZone::from_utc_datetime(&Utc, &dt))?;
+            .map(|dt| dt.with_timezone(&Utc))?;
         Ok(Some(dt))
     } else {
         Ok(None)

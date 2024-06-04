@@ -10,8 +10,9 @@ pub struct EspressoShot {
     roast_date: i64,
     shot_date: i64,
     grind_setting: i32,
-    weight_in_g: f32,
-    weight_out_g: f32,
+    weight_in_grams: f32,
+    weight_out_grams: f32,
+    brew_time_seconds: i32,
     rating: i32,
     acidity_bitterness: i32,
     muddy_watery: i32,
@@ -27,8 +28,9 @@ impl EspressoShot {
         roast_date: i64,
         shot_date: i64,
         grind_setting: i32,
-        weight_in_g: f32,
-        weight_out_g: f32,
+        weight_in_grams: f32,
+        weight_out_grams: f32,
+        brew_time_seconds: i32,
         rating: i32,
         acidity_bitterness: i32,
         muddy_watery: i32,
@@ -42,8 +44,9 @@ impl EspressoShot {
             roast_date,
             shot_date,
             grind_setting,
-            weight_in_g,
-            weight_out_g,
+            weight_in_grams,
+            weight_out_grams,
+            brew_time_seconds,
             rating,
             acidity_bitterness,
             muddy_watery,
@@ -58,8 +61,9 @@ impl EspressoShot {
         self.roast_date = dto.roast_date.timestamp();
         self.shot_date = dto.shot_date.timestamp();
         self.grind_setting = dto.grind_setting;
-        self.weight_in_g = dto.weight_in_g;
-        self.weight_out_g = dto.weight_out_g;
+        self.weight_in_grams = dto.weight_in_grams;
+        self.weight_out_grams = dto.weight_out_grams;
+        self.brew_time_seconds = dto.brew_time_seconds;
         self.rating = dto.rating;
         self.acidity_bitterness = dto.acidity_bitterness;
         self.muddy_watery = dto.muddy_watery;
@@ -91,12 +95,16 @@ impl EspressoShot {
         self.grind_setting
     }
 
-    pub fn get_weight_in_g(&self) -> f32 {
-        self.weight_in_g
+    pub fn get_weight_in_grams(&self) -> f32 {
+        self.weight_in_grams
     }
 
-    pub fn get_weight_out_g(&self) -> f32 {
-        self.weight_out_g
+    pub fn get_weight_out_grams(&self) -> f32 {
+        self.weight_out_grams
+    }
+
+    pub fn get_brew_time_seconds(&self) -> i32 {
+        self.brew_time_seconds
     }
 
     pub fn get_rating(&self) -> i32 {

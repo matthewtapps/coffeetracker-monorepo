@@ -25,12 +25,16 @@ pub async fn create_item(
             AttributeValue::N(item.get_grind_setting().to_string()),
         )
         .item(
-            "weight_in_g".to_string(),
-            AttributeValue::N(item.get_weight_in_g().to_string()),
+            "weight_in_grams".to_string(),
+            AttributeValue::N(item.get_weight_in_grams().to_string()),
         )
         .item(
-            "weight_out_g".to_string(),
-            AttributeValue::N(item.get_weight_out_g().to_string()),
+            "weight_out_grams".to_string(),
+            AttributeValue::N(item.get_weight_out_grams().to_string()),
+        )
+        .item(
+            "brew_time_seconds".to_string(),
+            AttributeValue::N(item.get_brew_time_seconds().to_string()),
         )
         .item(
             "rating".to_string(),
