@@ -84,6 +84,9 @@ export default function EspressoShotForm({
     !latestShot?.roastDate,
   );
 
+  console.log(latestShot);
+  console.log(roastDateEditable);
+
   return (
     <div className="m-3">
       <Dialog open={isUpdating}>
