@@ -20,6 +20,7 @@ async fn function_handler(
     client: &Client,
     event: Request,
 ) -> Result<impl IntoResponse, Error> {
+    tracing::info!("Received event: {:?}", event);
     let body = event.payload::<EspressoShotCreateDto>()?;
     let mut return_body = json!("").to_string();
     let mut status_code = StatusCode::OK;
