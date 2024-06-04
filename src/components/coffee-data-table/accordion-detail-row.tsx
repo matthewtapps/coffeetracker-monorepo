@@ -15,12 +15,13 @@ export function AccordionDetailRow<TData>({ row }: AccordionDetailRowProps<TData
                     {cell.column.id === "roaster" ? <RowItem value={flexRender(cell.column.columnDef.cell, cell.getContext())} title="Roaster" />
                     : cell.column.id === "beans" ? <RowItem value={flexRender(cell.column.columnDef.cell, cell.getContext())} title="Origin" />
                     : cell.column.id === "roastDate" ? <RowItem value={format(row.getValue("roastDate"), "yyyy/MM/dd")} title="Roast Date" />
-                    : cell.column.id === "shotDate" ? <RowItem value={format(row.getValue("roastDate"), "yyyy/MM/dd")} title="Shot Date" />
+                    : cell.column.id === "shotDate" ? <RowItem value={format(row.getValue("shotDate"), "yyyy/MM/dd")} title="Shot Date" />
                     : cell.column.id === "grindSetting" ? <RowItem value={flexRender(cell.column.columnDef.cell, cell.getContext())} title="Grind Setting" />
                     : cell.column.id === "brewTimeSeconds" ? <RowItem value={flexRender(cell.column.columnDef.cell, cell.getContext())} title="Brew Time" />
                     : cell.column.id === "weightInGrams" ? <RowItem value={flexRender(cell.column.columnDef.cell, cell.getContext())} title="Weight In" />
                     : cell.column.id === "weightOutGrams" ? <RowItem value={flexRender(cell.column.columnDef.cell, cell.getContext())} title="Weight Out" />
                     : cell.column.id === "notes" ? <RowItem value={flexRender(cell.column.columnDef.cell, cell.getContext())} title="Notes" />
+                    : cell.column.id === "rating" ? <RowItem value={flexRender(cell.column.columnDef.cell, cell.getContext())} title="Rating" />
                     : cell.column.id === "ratio" && <RowItem value={flexRender(cell.column.columnDef.cell, cell.getContext())} title="Ratio"/>
                     }
                 </div>
