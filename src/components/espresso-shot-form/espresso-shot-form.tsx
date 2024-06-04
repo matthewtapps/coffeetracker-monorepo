@@ -71,11 +71,9 @@ export default function EspressoShotForm() {
   }
 
   const [beanOriginEditable, editBeanOrigin] = React.useState(
-    latestShot?.beans === "",
+    !latestShot?.beans,
   );
-  const [roasterEditable, editRoaster] = React.useState(
-    latestShot?.roaster === "",
-  );
+  const [roasterEditable, editRoaster] = React.useState(!latestShot?.roaster);
   const [roastDateEditable, editRoastDate] = React.useState(
     !latestShot?.roastDate,
   );
@@ -120,6 +118,7 @@ export default function EspressoShotForm() {
                           </PopoverTrigger>
                           <PopoverContent className="w-auto p-0" align="start">
                             <Calendar
+                              required
                               mode="single"
                               selected={field.value}
                               onSelect={field.onChange}
@@ -144,6 +143,7 @@ export default function EspressoShotForm() {
                           <FormLabel>Grind Setting</FormLabel>
                           <FormControl>
                             <Input
+                              required
                               placeholder="Grind Setting"
                               type="number"
                               step="0.1"
@@ -162,6 +162,7 @@ export default function EspressoShotForm() {
                           <FormLabel>Brew Time (s)</FormLabel>
                           <FormControl>
                             <Input
+                              required
                               placeholder="Brew Time (s)"
                               type="number"
                               {...field}
@@ -181,6 +182,7 @@ export default function EspressoShotForm() {
                           <FormLabel>Weight In (g)</FormLabel>
                           <FormControl>
                             <Input
+                              required
                               placeholder="Weight In (g)"
                               type="number"
                               step="0.1"
@@ -199,6 +201,7 @@ export default function EspressoShotForm() {
                           <FormLabel>Weight Out (g)</FormLabel>
                           <FormControl>
                             <Input
+                              required
                               placeholder="Weight Out (g)"
                               type="number"
                               step="0.1"
@@ -294,7 +297,11 @@ export default function EspressoShotForm() {
                       <FormItem>
                         <FormLabel>Notes</FormLabel>
                         <FormControl>
-                          <Textarea placeholder="Shot Notes" {...field} />
+                          <Textarea
+                            required
+                            placeholder="Shot Notes"
+                            {...field}
+                          />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -311,6 +318,7 @@ export default function EspressoShotForm() {
                         <FormControl>
                           <div className="flex space-x-3">
                             <Input
+                              required
                               placeholder="Bean Origin"
                               disabled={!beanOriginEditable}
                               {...field}
@@ -346,6 +354,7 @@ export default function EspressoShotForm() {
                         <FormControl>
                           <div className="flex space-x-3">
                             <Input
+                              required
                               placeholder="Roaster"
                               disabled={!roasterEditable}
                               {...field}
@@ -419,6 +428,7 @@ export default function EspressoShotForm() {
                           </PopoverTrigger>
                           <PopoverContent className="w-auto p-0" align="start">
                             <Calendar
+                              required
                               mode="single"
                               selected={field.value}
                               onSelect={field.onChange}
