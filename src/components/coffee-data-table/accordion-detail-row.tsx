@@ -21,8 +21,7 @@ export function AccordionDetailRow<TData>({ row }: AccordionDetailRowProps<TData
                     : cell.column.id === "weightInGrams" ? <RowItem value={flexRender(cell.column.columnDef.cell, cell.getContext())} title="Weight In" />
                     : cell.column.id === "weightOutGrams" ? <RowItem value={flexRender(cell.column.columnDef.cell, cell.getContext())} title="Weight Out" />
                     : cell.column.id === "notes" ? <RowItem value={flexRender(cell.column.columnDef.cell, cell.getContext())} title="Notes" />
-                    : cell.column.id === "ratio" ? <RowItem value={flexRender(cell.column.columnDef.cell, cell.getContext())} title="Ratio"/>
-                    : null
+                    : cell.column.id === "ratio" && <RowItem value={flexRender(cell.column.columnDef.cell, cell.getContext())} title="Ratio"/>
                     }
                 </div>
             )
