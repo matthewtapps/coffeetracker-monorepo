@@ -23,7 +23,11 @@ async fn handler(
     let found_items = get_items(client, table_name, 10, last_key).await;
     let response = Response::builder()
         .status(StatusCode::OK)
-        .header("Content-Type", "application/json")
+        .header("Access-Control-Allow-Headers", "Content-Type")
+        .header(
+            "Access-Control-Allow-Methods",
+            "GET, PUT, DELETE, POST, OPTIONS, PATCH",
+        )
         .header("Access-Control-Allow-Origin", "*")
         .body(serde_json::to_string(&found_items.unwrap()).unwrap())
         .map_err(Box::new)?;

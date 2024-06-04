@@ -1,10 +1,10 @@
 output "app_url" {
-  description = "The website end-point of the S3 bucket"
-  value       = aws_s3_bucket_website_configuration.www_bucket.website_endpoint
+  description = "The website of the amplify web application"
+  value       = aws_amplify_app.coffeetracker.default_domain
 }
 
 output "api_base_url" {
-  value = aws_api_gateway_deployment.app.invoke_url
+  value = aws_apigatewayv2_api.lambda.api_endpoint
 }
 
 # output "user_pool_id" {

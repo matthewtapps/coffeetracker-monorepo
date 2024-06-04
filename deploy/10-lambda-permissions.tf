@@ -1,9 +1,9 @@
 resource "aws_lambda_permission" "lambda_permission_get-all" {
-  statement_id  = "AllowExecutionFromAPIGatewayUCI"
+  statement_id  = "AllowExecutionFromAPIGateway"
   action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.get-all.function_name
   principal     = "apigateway.amazonaws.com"
-  source_arn    = "${aws_api_gateway_rest_api.app.execution_arn}/*/GET/espressoshots"
+  source_arn    = "${aws_apigatewayv2_api.lambda.execution_arn}/*/*"
 }
 
 resource "aws_lambda_permission" "lambda_permission_create_todo" {
@@ -11,8 +11,7 @@ resource "aws_lambda_permission" "lambda_permission_create_todo" {
   action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.post.function_name
   principal     = "apigateway.amazonaws.com"
-  # More: http://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-control-access-using-iam-policies-to-invoke-api.html
-  source_arn = "${aws_api_gateway_rest_api.app.execution_arn}/*/POST/espressoshots"
+  source_arn    = "${aws_apigatewayv2_api.lambda.execution_arn}/*/*"
 }
 
 resource "aws_lambda_permission" "lambda_permission_get-latest" {
@@ -20,5 +19,5 @@ resource "aws_lambda_permission" "lambda_permission_get-latest" {
   action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.get-latest.function_name
   principal     = "apigateway.amazonaws.com"
-  source_arn    = "${aws_api_gateway_rest_api.app.execution_arn}/*/GET/espressoshots/latest"
+  source_arn    = "${aws_apigatewayv2_api.lambda.execution_arn}/*/*"
 }

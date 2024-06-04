@@ -48,7 +48,11 @@ async fn function_handler(
 
     let response = Response::builder()
         .status(status_code)
-        .header("Content-Type", "application/json")
+        .header("Access-Control-Allow-Headers", "Content-Type")
+        .header(
+            "Access-Control-Allow-Methods",
+            "GET, PUT, DELETE, POST, OPTIONS, PATCH",
+        )
         .header("Access-Control-Allow-Origin", "*")
         .body(return_body)
         .map_err(Box::new)?;
