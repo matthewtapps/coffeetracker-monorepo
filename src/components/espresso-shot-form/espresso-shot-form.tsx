@@ -383,6 +383,7 @@ export default function EspressoShotForm() {
                             <FormControl>
                               <div className="flex space-x-3">
                                 <Button
+                                  type="button"
                                   variant={"outline"}
                                   disabled={!roastDateEditable}
                                   className={cn(
