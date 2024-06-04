@@ -14,6 +14,13 @@ resource "aws_dynamodb_table" "espressoshots" {
     type = "N"
   }
 
+  local_secondary_index {
+    name      = "shot_date_index"
+    range_key = "shot_date"
+
+    projection_type = "ALL"
+  }
+
   tags = {
     Name        = "espressoshots"
     Environment = var.environment
