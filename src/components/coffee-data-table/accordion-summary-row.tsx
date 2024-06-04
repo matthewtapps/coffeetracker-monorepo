@@ -23,7 +23,7 @@ export function AccordionSummaryRow<TData>({ row }: AccordionSummaryRowProps<TDa
             if (SUMMARY_DATA.includes(cell.column.id)) {
                 return (
                     <div className="flex" key={`summary-${cell.id}`}>
-                        {cell.column.id === "shotDate" ? <RowItem value={format(row.getValue("shotDate"), "MM/dd")} />
+                        {cell.column.id === "shotDate" ? <RowItem value={format(row.getValue("shotDate"), "dd/MM")} />
                         : cell.column.id === "weightInGrams" ? <RowItem value={flexRender(cell.column.columnDef.cell, cell.getContext())} title={<MoveDownIcon className="pr-1 size-6"/>} />
                         : cell.column.id === "weightOutGrams" ? <RowItem value={flexRender(cell.column.columnDef.cell, cell.getContext())} title={<MoveUpIcon className="pr-1 size-6"/>} />
                         : cell.column.id === "brewTimeSeconds" ? <RowItem value={flexRender(cell.column.columnDef.cell, cell.getContext())} title={<HourglassIcon className="pr-1 size-6" />}/>
