@@ -5,6 +5,10 @@ export const coffeeApi = createApi({
   reducerPath: "coffeeApi",
   baseQuery: fetchBaseQuery({
     baseUrl: import.meta.env.VITE_API_ENDPOINT,
+    credentials: "same-origin",
+    prepareHeaders: (headers) => {
+      headers.set("Content-Type", "application/json");
+    },
   }),
   tagTypes: ["Coffee"],
   endpoints: (build) => ({
