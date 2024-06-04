@@ -41,6 +41,7 @@ const formSchema = z.object({
   weightInGrams: z.number(),
   weightOutGrams: z.number(),
   notes: z.string(),
+  rating: z.number(),
 });
 
 export default function EspressoShotForm() {
@@ -245,6 +246,31 @@ export default function EspressoShotForm() {
                             defaultValue={[0]}
                             max={5}
                             min={-5}
+                            step={1}
+                            value={[field.value]}
+                            onValueChange={(v) => field.onChange(v[0])}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="rating"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>
+                          <div className="flex justify-between py-1">
+                            <span>Bad</span>
+                            <span>Good</span>
+                          </div>
+                        </FormLabel>
+                        <FormControl>
+                          <Slider
+                            defaultValue={[5]}
+                            max={10}
+                            min={0}
                             step={1}
                             value={[field.value]}
                             onValueChange={(v) => field.onChange(v[0])}
