@@ -1,6 +1,7 @@
 # get-all Lambda, Logs, API gateway integration, API Gateway reoute
 resource "aws_lambda_function" "get-all" {
   function_name    = "get-all"
+  architectures    = ["arm64"]
   filename         = "lambdas/get-all/target/lambda/get-all/bootstrap.zip"
   source_code_hash = filebase64sha256("lambdas/get-all/target/lambda/get-all/bootstrap.zip")
   handler          = "bootstrap"
@@ -29,11 +30,16 @@ resource "aws_apigatewayv2_route" "get-all" {
 # post Lambda, Logs, API gateway integration, API Gateway reoute
 resource "aws_lambda_function" "post" {
   function_name    = "post"
+  architectures    = ["arm64"]
   filename         = "lambdas/post/target/lambda/post/bootstrap.zip"
   source_code_hash = filebase64sha256("lambdas/post/target/lambda/post/bootstrap.zip")
   handler          = "bootstrap"
   runtime          = "provided.al2023"
   role             = aws_iam_role.lambda_exec.arn
+  logging_config {
+    log_format            = "JSON"
+    application_log_level = "INFO"
+  }
 }
 
 resource "aws_cloudwatch_log_group" "post" {
@@ -57,6 +63,7 @@ resource "aws_apigatewayv2_route" "post" {
 # get-latest Lambda, Logs, API gateway integration, API Gateway reoute
 resource "aws_lambda_function" "get-latest" {
   function_name    = "get-latest"
+  architectures    = ["arm64"]
   filename         = "lambdas/get-latest/target/lambda/get-latest/bootstrap.zip"
   source_code_hash = filebase64sha256("lambdas/get-latest/target/lambda/get-latest/bootstrap.zip")
   handler          = "bootstrap"
@@ -85,6 +92,7 @@ resource "aws_apigatewayv2_route" "get-latest" {
 # cors-allow Lambda, Logs, API gateway integration, API Gateway reoute
 resource "aws_lambda_function" "cors-allow" {
   function_name    = "cors-allow"
+  architectures    = ["arm64"]
   filename         = "lambdas/cors-allow/target/lambda/cors-allow/bootstrap.zip"
   source_code_hash = filebase64sha256("lambdas/cors-allow/target/lambda/cors-allow/bootstrap.zip")
   handler          = "bootstrap"
@@ -92,7 +100,7 @@ resource "aws_lambda_function" "cors-allow" {
   role             = aws_iam_role.lambda_exec.arn
   environment {
     variables = {
-      ALLOWED_ORIGINS = aws_amplify_app.coffeetracker.default_domain
+      ALLOWED_ORIGINS = "https://main.${aws_amplify_app.coffeetracker.default_domain}"
     }
   }
 }
@@ -141,4 +149,24 @@ resource "aws_iam_role_policy_attachment" "lambda_policy" {
   role = aws_iam_role.lambda_exec.name
 
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+}
+
+resource "aws_iam_role_policy" "ddb_lambda_policy" {
+  name = "ddb_lambda_policy"
+  role = aws_iam_role.lambda_exec.id
+
+  policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": [
+        "dynamodb:*"
+      ],
+      "Resource": "${aws_dynamodb_table.espressoshots.arn}"
+    }
+  ]
+}
+EOF
 }
