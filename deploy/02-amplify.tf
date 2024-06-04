@@ -29,7 +29,7 @@ EOT
   }
 
   environment_variables = {
-    "VITE_API_ENDPOINT" = aws_apigatewayv2_api.lambda.api_endpoint
+    "VITE_API_ENDPOINT" = aws_apigatewayv2_stage.lambda.invoke_url
   }
 }
 
@@ -37,6 +37,7 @@ resource "aws_amplify_branch" "main" {
   app_id      = aws_amplify_app.coffeetracker.id
   branch_name = "main"
 
-  framework = "React"
-  stage     = "DEVELOPMENT"
+  framework         = "React"
+  stage             = "DEVELOPMENT"
+  enable_auto_build = true
 }
