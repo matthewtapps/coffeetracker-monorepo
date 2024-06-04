@@ -70,9 +70,15 @@ export default function EspressoShotForm() {
     postShot(values);
   }
 
-  const [beanOriginEditable, editBeanOrigin] = React.useState(false);
-  const [roasterEditable, editRoaster] = React.useState(false);
-  const [roastDateEditable, editRoastDate] = React.useState(false);
+  const [beanOriginEditable, editBeanOrigin] = React.useState(
+    latestShot?.beans === "",
+  );
+  const [roasterEditable, editRoaster] = React.useState(
+    latestShot?.roaster === "",
+  );
+  const [roastDateEditable, editRoastDate] = React.useState(
+    !latestShot?.roastDate,
+  );
 
   return (
     <div className="m-3">
