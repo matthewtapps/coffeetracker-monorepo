@@ -60,6 +60,7 @@ export default function EspressoShotForm() {
       muddyWatery: 0,
       weightInGrams: 18,
       weightOutGrams: 45,
+      rating: 5,
       notes: "",
     },
   });
