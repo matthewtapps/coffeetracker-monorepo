@@ -6,7 +6,7 @@ import { useGetShotsQuery } from "@/app/api/api";
 import Spinner from "@/components/loadingSpinner";
 
 export default function CoffeeDataTablePage() {
-  const { data, isError, isLoading, isSuccess } = useGetShotsQuery();
+  const { data, isLoading, isSuccess } = useGetShotsQuery();
   const [isDesktop, setDesktop] = React.useState(window.innerWidth > 1350);
 
   const updateMedia = () => {
@@ -17,10 +17,6 @@ export default function CoffeeDataTablePage() {
     window.addEventListener("resize", updateMedia);
     return () => window.removeEventListener("resize", updateMedia);
   });
-
-  if (isError) {
-    return <div>Something went wrong...</div>;
-  }
 
   return (
     <BaseContainer route="shotTable">
