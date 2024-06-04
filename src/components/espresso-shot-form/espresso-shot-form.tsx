@@ -24,10 +24,11 @@ import { format } from "date-fns";
 import { CalendarIcon } from "lucide-react";
 import { Calendar } from "../ui/calendar";
 import { Slider } from "@/components/ui/sliderSelector";
-import { useGetLatestShotQuery, useAddShotMutation } from "@/app/api/api";
+import { useAddShotMutation } from "@/app/api/api";
 import { Dialog, DialogContent, DialogTrigger } from "../ui/dialog";
 import Spinner from "../loadingSpinner";
 import { DialogTitle } from "@radix-ui/react-dialog";
+import { Coffee } from "../coffee-data-table/columns";
 
 const formSchema = z.object({
   beans: z.string(),
@@ -44,8 +45,13 @@ const formSchema = z.object({
   rating: z.number(),
 });
 
-export default function EspressoShotForm() {
-  const { data: latestShot } = useGetLatestShotQuery();
+interface EspressoShotFormProps {
+  latestShot: Coffee;
+}
+
+export default function EspressoShotForm({
+  latestShot,
+}: EspressoShotFormProps) {
   const [postShot, { isLoading: isUpdating }] = useAddShotMutation();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
