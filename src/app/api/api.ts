@@ -15,6 +15,12 @@ export const coffeeApi = createApi({
     getShots: build.query<Coffee[], void>({
       query: () => "espressoshots",
       providesTags: ["Coffee"],
+      transformResponse(response: {
+        lastEvaluatedKey: string;
+        entities: Coffee[];
+      }) {
+        return response.entities;
+      },
     }),
     addShot: build.mutation<Coffee, Partial<Coffee>>({
       query: (body) => ({
