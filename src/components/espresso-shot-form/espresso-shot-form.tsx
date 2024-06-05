@@ -67,11 +67,11 @@ export default function EspressoShotForm({
       shotDate: new Date(),
       grindSetting: latestShot?.grindSetting || 10,
       brewTimeSeconds: latestShot?.brewTimeSeconds || 30,
-      acidityBitterness: 0,
-      muddyWatery: 0,
-      weightInGrams: 18,
-      weightOutGrams: 45,
-      rating: 5,
+      acidityBitterness: latestShot?.acidityBitterness || 0,
+      muddyWatery: latestShot?.muddyWatery || 0,
+      weightInGrams: latestShot?.weightInGrams || 18,
+      weightOutGrams: latestShot?.weightOutGrams || 36,
+      rating: latestShot?.rating || 5,
       notes: "",
     },
     mode: "onSubmit",
@@ -346,7 +346,15 @@ export default function EspressoShotForm({
                     <FormItem>
                       <FormLabel>Notes</FormLabel>
                       <FormControl>
-                        <Textarea placeholder="Shot Notes" {...field} />
+                        <Textarea
+                          className="overflow-y-hidden"
+                          placeholder={
+                            latestShot?.notes
+                              ? `Previous notes:\n${latestShot.notes}`
+                              : ""
+                          }
+                          {...field}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
