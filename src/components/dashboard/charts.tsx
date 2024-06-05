@@ -32,7 +32,6 @@ const DEFAULT_DATE_RANGE = {
 };
 
 export const Charts = ({ data }: ChartsProps) => {
-  console.log(data);
   const theme = useTheme();
   const [date, setDate] = React.useState<DateRange | undefined>({
     from: DEFAULT_DATE_RANGE.start,
@@ -137,7 +136,7 @@ const getDefaultInterval = (): Interval => {
 };
 
 const getDateNormalisedChartData = (
-  date: Coffee[],
+  data: Coffee[],
   interval: Interval,
 ): { date: Date; count: number; cumulativeCount: number }[] => {
   /**
@@ -146,7 +145,9 @@ const getDateNormalisedChartData = (
   const days = eachDayOfInterval(interval);
   let cumulativeCount = 0;
   return days.map((day) => {
-    const count = date.filter((d) => isEqual(d.shotDate, day)).length;
+    const count = data.filter((d) =>
+      isEqual(endOfDay(d.shotDate), endOfDay(day)),
+    ).length;
     cumulativeCount += count;
     return {
       date: day,
@@ -171,4 +172,3 @@ const getDataDateRangeWithStartPadding = (
     to: dates.reduce((a, b) => (a > b ? a : b)),
   };
 };
-
