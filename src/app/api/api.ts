@@ -30,9 +30,15 @@ export const coffeeApi = createApi({
       }),
       invalidatesTags: ["Coffee"],
     }),
-    getLatestShot: build.query<Coffee, void>({
+    getLatestShot: build.query<Coffee | null, void>({
       query: () => "espressoshots/latest",
       providesTags: ["Coffee"],
+      transformResponse: (response, meta): Coffee | null => {
+        if (meta?.response?.status === 204) {
+          return null;
+        }
+        return response as Coffee;
+      },
     }),
   }),
 });
