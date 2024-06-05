@@ -1,5 +1,5 @@
 import { ColumnDef } from "@tanstack/react-table";
-import { ArrowUpDown } from "lucide-react";
+import { ArrowUpDown, Bean, Citrus, Scale, Waves, Weight } from "lucide-react";
 import { Button } from "../ui/button";
 import { format } from "date-fns";
 
@@ -132,13 +132,59 @@ export const columns: ColumnDef<Coffee>[] = [
     size: 80,
   },
   {
+    accessorKey: "acidityBitterness",
+    header: "Extraction",
+    id: "acidityBitterness",
+    cell: ({ row }) => {
+      const rating = Number(row.getValue("acidityBitterness"));
+      const formatted = Math.abs(rating).toFixed(0);
+      let icon;
+      if (rating < 0) {
+        icon = <Citrus className="pr-1 size-6" />;
+      } else if (rating > 0) {
+        icon = <Bean className="pr-1 size-6" />;
+      } else {
+        icon = <Scale className="pr-1 size-6 mr-2" />;
+      }
+      return (
+        <div className="flex justify-end">
+          {icon}
+          {rating !== 0 ? formatted : ""}
+        </div>
+      );
+    },
+  },
+  {
+    accessorKey: "muddyWatery",
+    header: "Body",
+    id: "muddyWatery",
+    cell: ({ row }) => {
+      const rating = Number(row.getValue("muddyWatery"));
+      const formatted = Math.abs(rating).toFixed(0);
+      let icon;
+      if (rating < 0) {
+        icon = <Weight className="pr-1 size-6" />;
+      } else if (rating > 0) {
+        icon = <Waves className="pr-1 size-6" />;
+      } else {
+        icon = <Scale className="pr-1 size-6 mr-2" />;
+      }
+      return (
+        <div className="flex justify-end">
+          {icon}
+          {rating !== 0 ? formatted : ""}
+        </div>
+      );
+    },
+  },
+  {
     accessorKey: "rating",
     header: "Rating",
     id: "rating",
     cell: ({ row }) => {
       const rating = Number(row.getValue("rating"));
       const formatted = rating.toFixed(0);
-      return <div className="text-right">{formatted}</div>;
+      return <div className="text-right">{formatted}/10</div>;
     },
   },
   {
