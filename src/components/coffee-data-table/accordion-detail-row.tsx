@@ -40,7 +40,7 @@ function RowItem({ value, title }: RowItemProps) {
     return (
         <div className="flex grow">
             <div className="flex-1 w-max justify-start text-left">{title}</div>
-            <div className="flex-1 w-max justify-end text-right">{value}</div>
+            <div className="flex-1 w-max justify-end text-right whitespace-pre-wrap">{value}</div>
         </div>
     )
 }

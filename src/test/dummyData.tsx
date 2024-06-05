@@ -489,7 +489,7 @@ export const dummyData: Coffee[] = [
     weightInGrams: getRandomWeightIn(),
     weightOutGrams: getRandomWeightOut(),
     rating: Math.random() * 10,
-    notes: "Sweet and fruity aroma",
+    notes: "Sweet and fruity aroma \n testing newlines \n and more",
     acidityBitterness: 3,
     muddyWatery: 3,
     updatedAt: new Date("2024-04-14"),
