@@ -49,6 +49,10 @@ resource "aws_apigatewayv2_stage" "lambda" {
   }
 }
 
+resource "aws_api_gateway_deployment" "lambda" {
+  rest_api_id = aws_apigatewayv2_api.lambda.id
+}
+
 resource "aws_cloudwatch_log_group" "api_gw" {
   name              = "/aws/apigateway/${aws_apigatewayv2_api.lambda.id}"
   retention_in_days = 7
