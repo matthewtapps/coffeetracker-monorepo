@@ -100,14 +100,16 @@ export function DataTable<TData, TValue>({
           onOpenChange={() => setColumnsMenuVisibility(!columnsMenuVisibility)}
         >
           <DropdownMenuTrigger asChild>
-            <Button
-              variant="outline"
-              className="ml-auto"
-              onClick={() => setColumnsMenuVisibility(!columnsMenuVisibility)}
-              disabled={!isDesktop}
-            >
-              Columns
-            </Button>
+            {!isDesktop ? null : (
+              <Button
+                variant="outline"
+                className="ml-auto"
+                onClick={() => setColumnsMenuVisibility(!columnsMenuVisibility)}
+                disabled={!isDesktop}
+              >
+                Columns
+              </Button>
+            )}
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             {table
