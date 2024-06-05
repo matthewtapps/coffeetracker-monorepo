@@ -3,7 +3,9 @@ resource "aws_amplify_app" "coffeetracker" {
   repository   = "https://github.com/${var.github_username}/${var.github_project_name}"
   access_token = var.github_token
 
-  build_spec = <<-EOT
+  enable_basic_auth      = true
+  basic_auth_credentials = base64encode("admin:espressoislife")
+  build_spec             = <<-EOT
     version: 1
     frontend:
       phases:
