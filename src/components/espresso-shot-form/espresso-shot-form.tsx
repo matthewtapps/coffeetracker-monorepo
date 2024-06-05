@@ -26,7 +26,7 @@ import { Calendar } from "../ui/calendar";
 import { Slider } from "@/components/ui/sliderSelector";
 import { useAddShotMutation } from "@/app/api/api";
 import { Dialog, DialogContent } from "../ui/dialog";
-import Spinner from "../loadingSpinner";
+import Spinner from "../loading-spinner";
 import { DialogTitle } from "@radix-ui/react-dialog";
 import { Coffee } from "../coffee-data-table/columns";
 import { useToast } from "../ui/use-toast";

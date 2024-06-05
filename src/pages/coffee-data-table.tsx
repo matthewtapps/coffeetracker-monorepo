@@ -3,7 +3,7 @@ import { BaseContainer } from "@/components/base-container";
 import { columns } from "@/components/coffee-data-table/columns";
 import { DataTable } from "@/components/coffee-data-table/data-table";
 import { useGetShotsQuery } from "@/app/api/api";
-import Spinner from "@/components/loadingSpinner";
+import Spinner from "@/components/loading-spinner";
 
 export default function CoffeeDataTablePage() {
   const { data, isLoading, isSuccess } = useGetShotsQuery();
