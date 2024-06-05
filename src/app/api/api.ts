@@ -10,7 +10,7 @@ export const coffeeApi = createApi({
       headers.set("Content-Type", "application/json");
     },
   }),
-  tagTypes: ["Coffee"],
+  tagTypes: ["Coffee", "LatestShot"],
   endpoints: (build) => ({
     getShots: build.query<Coffee[], void>({
       query: () => "espressoshots",
@@ -28,11 +28,33 @@ export const coffeeApi = createApi({
         method: "POST",
         body,
       }),
-      invalidatesTags: ["Coffee"],
+      invalidatesTags: ["Coffee", "LatestShot"],
+      async onQueryStarted(arg, { dispatch, queryFulfilled }) {
+        const patchResult = dispatch(
+          coffeeApi.util.updateQueryData(
+            "getLatestShot",
+            undefined,
+            (draft) => {
+              if (draft) {
+                Object.assign(draft, {
+                  ...arg,
+                  shotDate: arg.shotDate?.getDate(),
+                  roastDate: arg.roastDate?.getDate(),
+                });
+              }
+            },
+          ),
+        );
+        try {
+          await queryFulfilled;
+        } catch {
+          patchResult.undo();
+        }
+      },
     }),
     getLatestShot: build.query<Coffee | null, void>({
       query: () => "espressoshots/latest",
-      providesTags: ["Coffee"],
+      providesTags: ["LatestShot"],
       transformResponse: (response, meta): Coffee | null => {
         if (meta?.response?.status === 204) {
           return null;
