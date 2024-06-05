@@ -31,17 +31,17 @@ import { DialogTitle } from "@radix-ui/react-dialog";
 import { Coffee } from "../coffee-data-table/columns";
 
 const formSchema = z.object({
-  beans: z.string(),
-  roaster: z.string(),
-  roastDate: z.date(),
-  shotDate: z.date(),
-  grindSetting: z.number(),
-  brewTimeSeconds: z.number(),
+  beans: z.string().min(1, "Please enter a bean origin"),
+  roaster: z.string().min(1, "Please enter a roaster"),
+  roastDate: z.date().min(new Date("1900-01-01"), "Please enter a valid date"),
+  shotDate: z.date().min(new Date("1900-01-01"), "Please enter a valid date"),
+  grindSetting: z.number().min(0, "Please enter a valid grind setting"),
+  brewTimeSeconds: z.number().min(0, "Please enter a valid brew time"),
   acidityBitterness: z.number(),
   muddyWatery: z.number(),
-  weightInGrams: z.number(),
-  weightOutGrams: z.number(),
-  notes: z.string(),
+  weightInGrams: z.number().min(0, "Please enter a valid weight"),
+  weightOutGrams: z.number().min(0, "Please enter a valid weight"),
+  notes: z.string().min(1, "Please enter some notes"),
   rating: z.number(),
 });
 
@@ -71,10 +71,12 @@ export default function EspressoShotForm({
       rating: 5,
       notes: "",
     },
+    mode: "onSubmit",
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
+  const [activeTab, setActiveTab] = React.useState("espressoShot");
+
+  async function onSubmit(values: z.infer<typeof formSchema>) {
     postShot(values);
   }
 
@@ -86,9 +88,18 @@ export default function EspressoShotForm({
     !latestShot?.roastDate,
   );
 
+  React.useEffect(() => {
+    const errors = form.formState.errors;
+    if (errors.beans || errors.roaster || errors.roastDate) {
+      setActiveTab("beans");
+    } else {
+      setActiveTab("espressoShot");
+    }
+  }, [form.formState.errors]);
+
   return (
     <div className="m-3">
-      <Tabs defaultValue="espressoShot">
+      <Tabs value={activeTab} onValueChange={setActiveTab}>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3">
             <div className="flex flex-col">
@@ -313,11 +324,6 @@ export default function EspressoShotForm({
                     </FormItem>
                   )}
                 />
-                <div className="flex">
-                  <Button className="flex-grow mt-2" type="submit">
-                    Submit
-                  </Button>
-                </div>
               </TabsContent>
               <TabsContent value="beans" className="space-y-2">
                 <FormField
@@ -454,6 +460,9 @@ export default function EspressoShotForm({
               <TabsContent value="equipment" className="space-y-2">
                 <h1>TBD</h1>
               </TabsContent>
+              <Button className="flex-grow mt-3" type="submit">
+                Submit
+              </Button>
             </div>
           </form>
         </Form>
