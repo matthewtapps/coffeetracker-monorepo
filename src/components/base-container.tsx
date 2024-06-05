@@ -22,11 +22,13 @@ export function BaseContainer({ children, route }: BaseContainerProps) {
     <div className="flex z-10 min-h-screen w-full flex-col">
       <aside className="fixed z-10 inset-y-0 left-0 w-14 flex-col border-r flex">
         <div className="border-b p-2">
-          <Button variant="ghost" size="icon" aria-label="Home">
-            <Coffee
-              className="size-5 fill-foreground"
-              onClick={() => navigate("/")}
-            />
+          <Button
+            variant="ghost"
+            size="icon"
+            aria-label="Home"
+            className={`rounded-lg ${route === "shotForm" ? "bg-muted" : ""}`}
+          >
+            <Coffee onClick={() => navigate("/")} />
           </Button>
         </div>
         <nav className="flex flex-col px-2 gap-4 py-2">
