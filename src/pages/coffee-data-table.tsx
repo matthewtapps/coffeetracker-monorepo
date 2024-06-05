@@ -18,7 +18,6 @@ export default function CoffeeDataTablePage() {
     return () => window.removeEventListener("resize", updateMedia);
   });
 
-  console.log(data);
   return (
     <BaseContainer route="shotTable">
       {isLoading ? (
