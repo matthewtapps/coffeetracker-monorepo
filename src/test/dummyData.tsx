@@ -13,15 +13,6 @@ export const getLatestDummyShot = () => {
   return dummyData[dummyData.length - 1];
 };
 
-const formatDate = (date: Date): string => {
-  return date.toLocaleDateString("en-US", {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-    timeZone: "Australia/Sydney",
-  });
-};
-
 export const dummyData: Coffee[] = [
   {
     id: "1",
