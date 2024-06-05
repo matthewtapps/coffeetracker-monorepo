@@ -1,6 +1,6 @@
 name: react
 services:
-  development:
+  frontend:
     build:
       context: .
       target: development
@@ -8,11 +8,3 @@ services:
       - 5173:5173
     volumes:
       - ./src:/code/src:ro
-
-  production:
-    build:
-      context: .
-      target: builder
-    ports:
-      - 80:80
-      - 443:443

@@ -9,12 +9,7 @@ COPY package-lock.json .
 RUN npm ci
 COPY . .
 
+ENV VITE_APP_API_ENDPOINT=http://localapi.com/
+ENV VITE_APP_MODE=development
+
 CMD ["npm", "run", "host"]
-
-FROM development AS builder
-
-RUN npm run build
-
-FROM nginx:1.13-alpine
-
-COPY --from=builder /code/dist /usr/share/nginx/html

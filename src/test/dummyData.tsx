@@ -1,19 +1,25 @@
 import { Coffee } from "../components/coffee-data-table/columns";
 
-export const getDummyData = () => {
-  return dummyData.map((coffee) => {
-    return {
-      ...coffee,
-      shotDate: new Date(new Date(coffee.shotDate).setHours(0, 0, 0, 0)),
-      roastDate: coffee.roastDate
-        ? new Date(new Date(coffee.roastDate).setHours(0, 0, 0, 0))
-        : undefined,
-    };
-  });
+export interface DdbData {
+  lastEvaluatedKey: string;
+  entities: Coffee[];
+}
+
+export const getDummyData = (): DdbData => {
+  return { lastEvaluatedKey: "", entities: dummyData };
 };
 
 export const getLatestDummyShot = () => {
   return dummyData[dummyData.length - 1];
+};
+
+const formatDate = (date: Date): string => {
+  return date.toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+    timeZone: "Australia/Sydney",
+  });
 };
 
 export const dummyData: Coffee[] = [
