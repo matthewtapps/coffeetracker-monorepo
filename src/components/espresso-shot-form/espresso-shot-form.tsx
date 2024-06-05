@@ -29,6 +29,8 @@ import { Dialog, DialogContent } from "../ui/dialog";
 import Spinner from "../loadingSpinner";
 import { DialogTitle } from "@radix-ui/react-dialog";
 import { Coffee } from "../coffee-data-table/columns";
+import { useToast } from "../ui/use-toast";
+import { Toaster } from "../ui/toaster";
 
 const formSchema = z.object({
   beans: z.string().min(1, "Please enter a bean origin"),
@@ -52,6 +54,7 @@ interface EspressoShotFormProps {
 export default function EspressoShotForm({
   latestShot,
 }: EspressoShotFormProps) {
+  const { toast } = useToast();
   const [postShot, { isLoading: isUpdating }] = useAddShotMutation();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -78,7 +81,20 @@ export default function EspressoShotForm({
   const [activeTab, setActiveTab] = React.useState("espressoShot");
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    postShot(values);
+    try {
+      await postShot(values).unwrap();
+      form.reset();
+      toast({
+        title: "Success!",
+        description: "Espresso shot recorded",
+      });
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to record espresso shot",
+        variant: "destructive",
+      });
+    }
   }
 
   const [beanOriginEditable, editBeanOrigin] = React.useState(
@@ -482,6 +498,7 @@ export default function EspressoShotForm({
           <Spinner />
         </DialogContent>
       </Dialog>
+      <Toaster />
     </div>
   );
 }
