@@ -33,10 +33,10 @@ pub async fn get_items(
         .await?;
 
     match output.items {
-        Some(item) => {
+        Some(items) if !items.is_empty() => {
             let mut entities = Vec::new();
 
-            for i in item {
+            for i in items {
                 let entity: Result<EspressoShot, serde_dynamo::Error> = serde_dynamo::from_item(i);
                 match entity {
                     Ok(entity) => {
@@ -60,7 +60,7 @@ pub async fn get_items(
 
             Ok(EspressoShotViewPaginated::new(last_key, entities))
         }
-        None => {
+        _ => {
             let entities = Vec::new();
             Ok(EspressoShotViewPaginated::new("".to_string(), entities))
         }

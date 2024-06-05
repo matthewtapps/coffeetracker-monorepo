@@ -16,9 +16,9 @@ pub async fn get_latest_item(
         .await?;
 
     match output.items {
-        Some(item) => {
+        Some(items) if !items.is_empty() => {
             let entity: Result<EspressoShot, serde_dynamo::Error> =
-                serde_dynamo::from_item(item[0].clone());
+                serde_dynamo::from_item(items[0].clone());
             match entity {
                 Ok(entity) => Ok(entity),
                 Err(e) => {
@@ -27,6 +27,6 @@ pub async fn get_latest_item(
                 }
             }
         }
-        None => Err(QueryError::NotFound),
+        _ => Err(QueryError::NotFound),
     }
 }
