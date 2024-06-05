@@ -9,7 +9,7 @@ const handlers = [
     return HttpResponse.json(dummyData);
   }),
   http.get("/espressoshots/latest", () => {
-    return HttpResponse.json(dummyData.entities[0]);
+    return HttpResponse.json(dummyData.entities[dummyData.entities.length - 1]);
   }),
   http.post("/espressoshots", (_) => {
     return HttpResponse.json();
