@@ -46,7 +46,7 @@ const formSchema = z.object({
 });
 
 interface EspressoShotFormProps {
-  latestShot: Coffee;
+  latestShot: Coffee | null;
 }
 
 export default function EspressoShotForm({
