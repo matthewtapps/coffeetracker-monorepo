@@ -1,30 +1,32 @@
-# React + TypeScript + Vite
+# Coffeetracker / Espresso Shot Tracker
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Prerequisites
 
-Currently, two official plugins are available:
+- Node.js & npm
+- Terraform for deploying the backend
+- Docker for running the development environment
+- Rust/cargo for lambda function development and building
+- AWS CLI for deploying the backend, configured with an access key and secret key for an IAM user with the necessary permissions to create resources
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Frontend
 
-## Expanding the ESLint configuration
+- Run `npm install` in the root directory of the project to install dependencies.
+- Start the development environment with `docker compose up --build`. This starts the React frontend in a docker container, which will be available at <http://localhost:5173>.
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+## Backend
 
-- Configure the top-level `parserOptions` property like this:
+- Create an S3 bucket manually which will hold the Terraform state
+- Populate a file in `./deploy/terraform.tfvars` with the following variables:
+  - default_region
+  - github_username
+  - github_project_name (the name of the repository, without the `.git` extension)
+  - github_token (a personal fine-grained access token for the repository - set this up under `Settings` -> `Developer settings` -> `Personal access tokens`)
+  - app_name ("coffeetracker")
+  - environment ("dev" - this gets applied to the stack in AWS)
+  - common_tags
+  - domain_name (unused for now)
+  - bucket_name (the name of the S3 bucket created earlier)
 
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
-```
-
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+Initialize Terraform with `terraform init`.
+Lambdas can be built using `make build` in the ./deploy directory. I recommend using the option `make -j4 build` to compile concurrently. Specific lambdas can be built by running `make build $lambda`.
+For other Terraform commands, make sure to specify the var file `terraform apply -var-file=terraform.tfvars`.
