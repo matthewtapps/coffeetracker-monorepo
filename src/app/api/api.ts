@@ -31,19 +31,15 @@ export const coffeeApi = createApi({
       invalidatesTags: ["Coffee", "LatestShot"],
       async onQueryStarted(arg, { dispatch, queryFulfilled }) {
         const patchResult = dispatch(
-          coffeeApi.util.updateQueryData(
-            "getLatestShot",
-            undefined,
-            (draft) => {
-              if (draft) {
-                Object.assign(draft, {
-                  ...arg,
-                  shotDate: arg.shotDate?.getDate(),
-                  roastDate: arg.roastDate?.getDate(),
-                });
-              }
-            },
-          ),
+          coffeeApi.util.updateQueryData("getShots", undefined, (draft) => {
+            if (draft) {
+              draft.unshift({
+                ...(arg as Coffee),
+                id: "",
+                updatedAt: new Date(),
+              });
+            }
+          }),
         );
         try {
           await queryFulfilled;
