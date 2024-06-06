@@ -28,8 +28,9 @@ resource "aws_apigatewayv2_api" "lambda" {
 }
 
 resource "aws_apigatewayv2_stage" "lambda" {
-  api_id = aws_apigatewayv2_api.lambda.id
-  name   = "coffeetracker_lambda_stage"
+  api_id      = aws_apigatewayv2_api.lambda.id
+  name        = "coffeetracker_lambda_stage"
+  auto_deploy = true
 
   access_log_settings {
     destination_arn = aws_cloudwatch_log_group.api_gw.arn
@@ -49,8 +50,8 @@ resource "aws_apigatewayv2_stage" "lambda" {
   }
 }
 
-resource "aws_api_gateway_deployment" "lambda" {
-  rest_api_id = aws_apigatewayv2_api.lambda.id
+resource "aws_apigatewayv2_deployment" "lambda" {
+  api_id = aws_apigatewayv2_api.lambda.id
 }
 
 resource "aws_cloudwatch_log_group" "api_gw" {
