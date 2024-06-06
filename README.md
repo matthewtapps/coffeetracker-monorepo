@@ -12,6 +12,7 @@
 
 - Run `npm install` in the root directory of the project to install dependencies.
 - Start the development environment with `docker compose up --build`. This starts the React frontend in a docker container, which will be available at <http://localhost:5173>.
+- The development environment mocks the backend responses automatically using the `msw` library. The mock data is in `./src/test/dummyData.tsx`.
 
 ## Backend
 
