@@ -32,7 +32,9 @@ I develop using WSL2. There are likely some things that would be annoying for na
 
 Initialize Terraform with `terraform init`.
 Lambdas can be built using `make build` in the ./deploy directory. I recommend using the option `make -j4 build` to compile concurrently. Specific lambdas can be built by running `make build $lambda_name`, e.g. `make build get-all`.
-For other Terraform commands, make sure to specify the var file `terraform init -var-file=terraform.tfvars`.
+For other Terraform commands, make sure to specify the var file `-var-file=terraform.tfvars`.
+Initialize Terraform with `terraform init -var-file=terraform.tfvars`.
+Deploy to AWS with `terraform apply -var-file=terraform.tfvars`.
 You will need to manually trigger an Amplify deployment for the main branch - the `auto_build` setting for Amplify branches in Terraform doesn't appear to work properly.
 Amplify will automatically re-deploy for any pushes to the main branch of your repository.
 
