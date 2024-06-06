@@ -36,3 +36,11 @@ variable "bucket_name" {
   type        = string
   description = "The name of the bucket without the www. prefix. Normally domain_name."
 }
+
+variable "amplify_username" {
+  type = string
+}
+
+variable "amplify_password" {
+  type = string
+}
