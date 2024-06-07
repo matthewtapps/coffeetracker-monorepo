@@ -1,3 +1,4 @@
+use aws_sdk_dynamodb::types::AttributeValue;
 use aws_sdk_dynamodb::Client;
 use shared::models::dto::EspressoShotViewDto;
 use shared::models::entities::EspressoShot;
@@ -9,10 +10,19 @@ pub async fn get_latest_item(
     table_name: &str,
 ) -> Result<EspressoShotViewDto, QueryError> {
     let output = client
-        .scan()
+        .query()
         .limit(1)
         .table_name(table_name)
         .index_name("shot_date_index")
+        .key_condition_expression("shot_date > :rangeKey")
+        .expression_attribute_values(
+            ":rangeKey",
+            AttributeValue::N(
+                (chrono::Utc::now() - chrono::Duration::days(1))
+                    .timestamp()
+                    .to_string(),
+            ),
+        )
         .send()
         .await?;
 

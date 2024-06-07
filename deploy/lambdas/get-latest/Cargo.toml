@@ -37,3 +37,4 @@ tracing-subscriber = { version = "0.3", features = [
 ] }
 config = "0.14.0"
 lambda_http = "0.10.0"
+chrono = "0.4.38"

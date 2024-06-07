@@ -803,6 +803,7 @@ dependencies = [
  "aws-config",
  "aws-sdk-dynamodb",
  "aws_lambda_events",
+ "chrono",
  "config",
  "lambda_http",
  "serde",
