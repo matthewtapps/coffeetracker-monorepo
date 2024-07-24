@@ -33,17 +33,17 @@ import { useToast } from "../ui/use-toast";
 import { Toaster } from "../ui/toaster";
 
 const formSchema = z.object({
-  beans: z.string().min(1, "Please enter a bean origin"),
-  roaster: z.string().min(1, "Please enter a roaster"),
-  roastDate: z.date().min(new Date("1900-01-01"), "Please enter a valid date"),
-  shotDate: z.date().min(new Date("1900-01-01"), "Please enter a valid date"),
-  grindSetting: z.number().min(0, "Please enter a valid grind setting"),
+  beans: z.string().optional(),
+  roaster: z.string().optional(),
+  roastDate: z.date().optional(),
+  shotDate: z.date().optional(),
+  grindSetting: z.number().optional(),
   brewTimeSeconds: z.number().min(0, "Please enter a valid brew time"),
   acidityBitterness: z.number(),
   muddyWatery: z.number(),
   weightInGrams: z.number().min(0, "Please enter a valid weight"),
   weightOutGrams: z.number().min(0, "Please enter a valid weight"),
-  notes: z.string().min(1, "Please enter some notes"),
+  notes: z.string().optional(),
   rating: z.number(),
 });
 
@@ -61,11 +61,8 @@ export default function EspressoShotForm({
     defaultValues: {
       beans: latestShot?.beans || "",
       roaster: latestShot?.roaster || "",
-      roastDate: latestShot?.roastDate
-        ? new Date(latestShot.roastDate)
-        : new Date(),
-      shotDate: new Date(),
-      grindSetting: latestShot?.grindSetting || 10,
+      roastDate: latestShot?.roastDate ? new Date(latestShot.roastDate) : undefined,
+      grindSetting: latestShot?.grindSetting || undefined,
       brewTimeSeconds: latestShot?.brewTimeSeconds || 30,
       acidityBitterness: latestShot?.acidityBitterness || 0,
       muddyWatery: latestShot?.muddyWatery || 0,
@@ -97,6 +94,7 @@ export default function EspressoShotForm({
     }
   }
 
+  const [shotDateEditable, editShotDate] = React.useState(false);
   const [beanOriginEditable, editBeanOrigin] = React.useState(
     !latestShot?.beans,
   );
@@ -113,6 +111,23 @@ export default function EspressoShotForm({
       setActiveTab("espressoShot");
     }
   }, [form.formState.errors]);
+
+  const handleDaySelect = (date: Date | undefined, formSelectHandler: (e: any) => void) => {
+    if (!date) {
+      formSelectHandler(date)
+      return
+    }
+    const now = new Date()
+    const dateWithTime = new Date(
+      date.getFullYear(),
+      date.getMonth(),
+      date.getDate(),
+      now.getHours(),
+      now.getMinutes(),
+      now.getSeconds()
+    )
+    formSelectHandler(dateWithTime)
+  };
 
   return (
     <div className="m-3">
@@ -133,29 +148,45 @@ export default function EspressoShotForm({
                     <FormItem className="flex flex-col">
                       <FormLabel>Shot Date</FormLabel>
                       <Popover>
-                        <PopoverTrigger asChild>
+                        <div className="flex space-x-2">
                           <FormControl>
-                            <Button
-                              variant={"outline"}
-                              className={cn(
-                                "pl-3 text-left font-normal",
-                                !field.value && "text-muted-foreground",
-                              )}
-                            >
-                              {field.value ? (
-                                format(field.value, "PPP")
-                              ) : (
-                                <span>Pick a date</span>
-                              )}
-                              <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                            </Button>
+                            <PopoverTrigger asChild>
+                              <Button
+                                variant={"outline"}
+                                disabled={!shotDateEditable}
+                                className={cn(
+                                  "pl-3 text-left font-normal flex-grow",
+                                )}
+                              >
+                                {field.value ? (
+                                  format(field.value, "PPP")
+                                ) : (
+                                  <span>Now</span>
+                                )}
+                                <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                              </Button>
+                            </PopoverTrigger>
                           </FormControl>
-                        </PopoverTrigger>
+                          <Button
+                            type="button"
+                            variant="default"
+                            onClick={() => {
+                              editShotDate(true);
+                              form.setFocus("shotDate", {
+                                shouldSelect: true,
+                              });
+                            }}
+                          >
+                            Edit
+                          </Button>
+                        </div>
                         <PopoverContent className="w-auto p-0" align="start">
                           <Calendar
                             mode="single"
                             selected={field.value}
-                            onSelect={field.onChange}
+                            onSelect={(value): void => {
+                              handleDaySelect(value, field.onChange)
+                            }}
                             disabled={(date) =>
                               date > new Date() || date < new Date("1900-01-01")
                             }
@@ -448,7 +479,6 @@ export default function EspressoShotForm({
                                 variant={"outline"}
                                 className={cn(
                                   "pl-3 text-left font-normal flex-grow",
-                                  !field.value && "text-muted-foreground",
                                 )}
                               >
                                 {field.value ? (
@@ -477,7 +507,9 @@ export default function EspressoShotForm({
                           <Calendar
                             mode="single"
                             selected={field.value}
-                            onSelect={field.onChange}
+                            onSelect={(value): void => {
+                              handleDaySelect(value, field.onChange)
+                            }}
                             disabled={(date) =>
                               date > new Date() || date < new Date("1900-01-01")
                             }
@@ -507,6 +539,6 @@ export default function EspressoShotForm({
         </DialogContent>
       </Dialog>
       <Toaster />
-    </div>
+    </div >
   );
 }

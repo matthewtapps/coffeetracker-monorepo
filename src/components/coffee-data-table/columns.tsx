@@ -5,18 +5,18 @@ import { format } from "date-fns";
 
 export type Coffee = {
   id: string;
-  beans: string;
-  roaster: string;
-  roastDate: Date;
+  beans: string | undefined;
+  roaster: string | undefined;
+  roastDate: Date | undefined;
   shotDate: Date;
-  grindSetting: number;
+  grindSetting: number | undefined;
   brewTimeSeconds: number;
   weightInGrams: number;
   weightOutGrams: number;
   rating: number;
   acidityBitterness: number;
   muddyWatery: number;
-  notes: string;
+  notes: string | undefined;
   updatedAt: Date;
 };
 
