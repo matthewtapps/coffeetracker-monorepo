@@ -16,6 +16,7 @@ export const getLatestDummyShot = () => {
 export const dummyData: Coffee[] = [
   {
     id: "1",
+    userId: "static_user_id",
     beans: "Papua New Guinea",
     roaster: "Proud Mary",
     roastDate: new Date("2024-04-04"),
@@ -32,6 +33,7 @@ export const dummyData: Coffee[] = [
   },
   {
     id: "2",
+    userId: "static_user_id",
     beans: "Papua New Guinea",
     roaster: "Proud Mary",
     roastDate: new Date("2024-04-04"),
@@ -48,6 +50,7 @@ export const dummyData: Coffee[] = [
   },
   {
     id: "3",
+    userId: "static_user_id",
     beans: "Papua New Guinea",
     roaster: "Proud Mary",
     roastDate: new Date("2024-04-04"),
@@ -64,6 +67,7 @@ export const dummyData: Coffee[] = [
   },
   {
     id: "4",
+    userId: "static_user_id",
     beans: "Papua New Guinea",
     roaster: "Proud Mary",
     roastDate: new Date("2024-04-04"),
@@ -80,6 +84,7 @@ export const dummyData: Coffee[] = [
   },
   {
     id: "5",
+    userId: "static_user_id",
     beans: "Papua New Guinea",
     roaster: "Proud Mary",
     roastDate: new Date("2024-04-04"),
@@ -96,6 +101,7 @@ export const dummyData: Coffee[] = [
   },
   {
     id: "6",
+    userId: "static_user_id",
     beans: "Papua New Guinea",
     roaster: "Proud Mary",
     roastDate: new Date("2024-04-04"),
@@ -112,6 +118,7 @@ export const dummyData: Coffee[] = [
   },
   {
     id: "7",
+    userId: "static_user_id",
     beans: "Papua New Guinea",
     roaster: "Proud Mary",
     roastDate: new Date("2024-04-04"),
@@ -128,6 +135,7 @@ export const dummyData: Coffee[] = [
   },
   {
     id: "8",
+    userId: "static_user_id",
     beans: "Papua New Guinea",
     roaster: "Proud Mary",
     roastDate: new Date("2024-04-04"),
@@ -144,6 +152,7 @@ export const dummyData: Coffee[] = [
   },
   {
     id: "9",
+    userId: "static_user_id",
     beans: "Papua New Guinea",
     roaster: "Proud Mary",
     roastDate: new Date("2024-04-04"),
@@ -160,6 +169,7 @@ export const dummyData: Coffee[] = [
   },
   {
     id: "10",
+    userId: "static_user_id",
     beans: "Papua New Guinea",
     roaster: "Proud Mary",
     roastDate: new Date("2024-04-04"),
@@ -176,6 +186,7 @@ export const dummyData: Coffee[] = [
   },
   {
     id: "11",
+    userId: "static_user_id",
     beans: "Papua New Guinea",
     roaster: "Proud Mary",
     roastDate: new Date("2024-04-04"),
@@ -192,6 +203,7 @@ export const dummyData: Coffee[] = [
   },
   {
     id: "12",
+    userId: "static_user_id",
     beans: "Papua New Guinea",
     roaster: "Proud Mary",
     roastDate: new Date("2024-04-04"),
@@ -208,6 +220,7 @@ export const dummyData: Coffee[] = [
   },
   {
     id: "13",
+    userId: "static_user_id",
     beans: "Papua New Guinea",
     roaster: "Proud Mary",
     roastDate: new Date("2024-04-04"),
@@ -224,6 +237,7 @@ export const dummyData: Coffee[] = [
   },
   {
     id: "14",
+    userId: "static_user_id",
     beans: "Test Origin",
     roaster: "Test Roaster",
     roastDate: new Date("2024-04-04"),
@@ -240,6 +254,7 @@ export const dummyData: Coffee[] = [
   },
   {
     id: "15",
+    userId: "static_user_id",
     beans: "Papua New Guinea",
     roaster: "Proud Mary",
     roastDate: new Date("2024-04-04"),
@@ -256,6 +271,7 @@ export const dummyData: Coffee[] = [
   },
   {
     id: "16",
+    userId: "static_user_id",
     beans: "Papua New Guinea",
     roaster: "Proud Mary",
     roastDate: new Date("2024-04-04"),
@@ -272,6 +288,7 @@ export const dummyData: Coffee[] = [
   },
   {
     id: "17",
+    userId: "static_user_id",
     beans: "Papua New Guinea",
     roaster: "Proud Mary",
     roastDate: new Date("2024-04-04"),
@@ -288,6 +305,7 @@ export const dummyData: Coffee[] = [
   },
   {
     id: "18",
+    userId: "static_user_id",
     beans: "Papua New Guinea",
     roaster: "Proud Mary",
     roastDate: new Date("2024-04-04"),
@@ -304,6 +322,7 @@ export const dummyData: Coffee[] = [
   },
   {
     id: "19",
+    userId: "static_user_id",
     beans: "Papua New Guinea",
     roaster: "Proud Mary",
     roastDate: new Date("2024-04-04"),
@@ -320,6 +339,7 @@ export const dummyData: Coffee[] = [
   },
   {
     id: "20",
+    userId: "static_user_id",
     beans: "Papua New Guinea",
     roaster: "Proud Mary",
     roastDate: new Date("2024-04-04"),
@@ -336,6 +356,7 @@ export const dummyData: Coffee[] = [
   },
   {
     id: "21",
+    userId: "static_user_id",
     beans: "Papua New Guinea",
     roaster: "Proud Mary",
     roastDate: new Date("2024-04-04"),
@@ -352,6 +373,7 @@ export const dummyData: Coffee[] = [
   },
   {
     id: "22",
+    userId: "static_user_id",
     beans: "Papua New Guinea",
     roaster: "Proud Mary",
     roastDate: new Date("2024-04-04"),
@@ -368,6 +390,7 @@ export const dummyData: Coffee[] = [
   },
   {
     id: "23",
+    userId: "static_user_id",
     beans: "Papua New Guinea",
     roaster: "Proud Mary",
     roastDate: new Date("2024-04-04"),
@@ -384,6 +407,7 @@ export const dummyData: Coffee[] = [
   },
   {
     id: "24",
+    userId: "static_user_id",
     beans: "Papua New Guinea",
     roaster: "Proud Mary",
     roastDate: new Date("2024-04-04"),
@@ -400,6 +424,7 @@ export const dummyData: Coffee[] = [
   },
   {
     id: "25",
+    userId: "static_user_id",
     beans: "Papua New Guinea",
     roaster: "Proud Mary",
     roastDate: new Date("2024-04-04"),
@@ -416,6 +441,7 @@ export const dummyData: Coffee[] = [
   },
   {
     id: "26",
+    userId: "static_user_id",
     beans: "Papua New Guinea",
     roaster: "Proud Mary",
     roastDate: new Date("2024-04-16"),
@@ -432,6 +458,7 @@ export const dummyData: Coffee[] = [
   },
   {
     id: "27",
+    userId: "static_user_id",
     beans: "Papua New Guinea",
     roaster: "Proud Mary",
     roastDate: new Date("2024-04-16"),
@@ -448,6 +475,7 @@ export const dummyData: Coffee[] = [
   },
   {
     id: "28",
+    userId: "static_user_id",
     beans: "Another Origin",
     roaster: "Another Roaster",
     roastDate: new Date("2024-04-16"),
@@ -464,6 +492,7 @@ export const dummyData: Coffee[] = [
   },
   {
     id: "29",
+    userId: "static_user_id",
     beans: "Papua New Guinea",
     roaster: "Proud Mary",
     roastDate: new Date("2024-04-16"),
@@ -480,6 +509,7 @@ export const dummyData: Coffee[] = [
   },
   {
     id: "30",
+    userId: "static_user_id",
     beans: "Papua New Guinea",
     roaster: "Proud Mary",
     roastDate: new Date("2024-04-16"),
