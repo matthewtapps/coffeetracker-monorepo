@@ -41,6 +41,10 @@ export const Charts = ({ data }: ChartsProps) => {
     setDate(date);
   };
 
+  if (data.length < 1) {
+    return <div>No data</div>
+  }
+
   return (
     <div>
       <DatePickerWithRange
