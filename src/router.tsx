@@ -3,21 +3,28 @@ import CoffeeDataTablePage from "./pages/coffee-data-table";
 import DashboardPage from "./pages/dashboard";
 import EspressoShotFormPage from "./pages/espresso-shot-form";
 import ErrorPage from "./pages/error";
+import ProtectedRoute from "./lib/ProtectedRoute";
+import { LoginForm } from "./pages/login";
 
 export const router = createBrowserRouter([
   {
     path: "/data",
-    element: <CoffeeDataTablePage />,
+    element: <ProtectedRoute element={<CoffeeDataTablePage />} />,
     errorElement: <ErrorPage />,
   },
   {
     path: "/",
-    element: <EspressoShotFormPage />,
+    element: <ProtectedRoute element={<EspressoShotFormPage />} />,
     errorElement: <ErrorPage />,
   },
   {
     path: "/dashboard",
-    element: <DashboardPage />,
+    element: <ProtectedRoute element={<DashboardPage />} />,
     errorElement: <ErrorPage />,
   },
+  {
+    path: "/login",
+    element: <LoginForm />,
+    errorElement: <ErrorPage />,
+  }
 ]);
