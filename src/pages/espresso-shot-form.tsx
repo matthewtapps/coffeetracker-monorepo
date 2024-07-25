@@ -4,7 +4,9 @@ import EspressoShotForm from "@/components/espresso-shot-form/espresso-shot-form
 import Spinner from "@/components/loading-spinner";
 
 export default function EspressoShotFormPage() {
-  const { data, isLoading, isSuccess } = useGetLatestShotQuery();
+  // TODO: Implement real user ID
+  const userId = "static_user_id"
+  const { data, isLoading, isSuccess } = useGetLatestShotQuery({ userId });
   return (
     <BaseContainer route="shotForm">
       {isLoading ? (

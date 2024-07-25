@@ -48,8 +48,8 @@ export const coffeeApi = createApi({
         }
       },
     }),
-    getLatestShot: build.query<Coffee | null, void>({
-      query: () => "espressoshots/latest",
+    getLatestShot: build.query<Coffee | null, { userId: string }>({
+      query: ({ userId }) => `espressoshots/latest?user_id=${userId}`,
       providesTags: ["LatestShot"],
       transformResponse: (response, meta): Coffee | null => {
         if (meta?.response?.status === 204) {

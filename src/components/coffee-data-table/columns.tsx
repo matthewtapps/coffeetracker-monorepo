@@ -5,6 +5,7 @@ import { format } from "date-fns";
 
 export type Coffee = {
   id: string;
+  userId: string;
   beans: string | undefined;
   roaster: string | undefined;
   roastDate: Date | undefined;

@@ -79,7 +79,9 @@ export default function EspressoShotForm({
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
-      await postShot(values).unwrap();
+      // TODO: Implement real user IDs
+      const userId = "static_user_id"
+      await postShot({ ...values, userId }).unwrap();
       form.reset();
       toast({
         title: "Success!",
