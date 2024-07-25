@@ -14,20 +14,21 @@ pub struct EspressoShotViewPaginated {
 #[serde(rename_all = "camelCase")]
 pub struct EspressoShotViewDto {
     pub id: String,
-    pub beans: String,
-    pub roaster: String,
-    #[serde(serialize_with = "serialize_dt")]
-    pub roast_date: DateTime<Utc>,
+    pub user_id: String,
+    pub beans: Option<String>,
+    pub roaster: Option<String>,
+    #[serde(serialize_with = "serialize_dt_opt")]
+    pub roast_date: Option<DateTime<Utc>>,
     #[serde(serialize_with = "serialize_dt")]
     pub shot_date: DateTime<Utc>,
-    pub grind_setting: i32,
+    pub grind_setting: Option<f32>,
     pub weight_in_grams: f32,
     pub weight_out_grams: f32,
     pub brew_time_seconds: i32,
     pub rating: i32,
     pub acidity_bitterness: i32,
     pub muddy_watery: i32,
-    pub notes: String,
+    pub notes: Option<String>,
     #[serde(serialize_with = "serialize_dt")]
     pub updated_at: DateTime<Utc>,
 }
@@ -35,40 +36,42 @@ pub struct EspressoShotViewDto {
 #[derive(Debug, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct EspressoShotCreateDto {
-    pub beans: String,
-    pub roaster: String,
-    #[serde(deserialize_with = "deserialize_dt")]
-    pub roast_date: DateTime<Utc>,
+    pub user_id: String,
+    pub beans: Option<String>,
+    pub roaster: Option<String>,
+    #[serde(deserialize_with = "deserialize_dt_opt", default)]
+    pub roast_date: Option<DateTime<Utc>>,
     #[serde(deserialize_with = "deserialize_dt_opt", default)]
     pub shot_date: Option<DateTime<Utc>>,
-    pub grind_setting: i32,
+    pub grind_setting: Option<f32>,
     pub weight_in_grams: f32,
     pub weight_out_grams: f32,
     pub brew_time_seconds: i32,
     pub rating: i32,
     pub acidity_bitterness: i32,
     pub muddy_watery: i32,
-    pub notes: String,
+    pub notes: Option<String>,
 }
 
 #[derive(Debug, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct EspressoShotPutDto {
     pub id: String,
-    pub beans: String,
-    pub roaster: String,
-    #[serde(deserialize_with = "deserialize_dt")]
-    pub roast_date: DateTime<Utc>,
+    pub user_id: String,
+    pub beans: Option<String>,
+    pub roaster: Option<String>,
+    #[serde(deserialize_with = "deserialize_dt_opt", default)]
+    pub roast_date: Option<DateTime<Utc>>,
     #[serde(deserialize_with = "deserialize_dt")]
     pub shot_date: DateTime<Utc>,
-    pub grind_setting: i32,
+    pub grind_setting: Option<f32>,
     pub weight_in_grams: f32,
     pub weight_out_grams: f32,
     pub brew_time_seconds: i32,
     pub rating: i32,
     pub acidity_bitterness: i32,
     pub muddy_watery: i32,
-    pub notes: String,
+    pub notes: Option<String>,
 }
 
 impl EspressoShotViewPaginated {
@@ -89,9 +92,10 @@ impl Into<EspressoShot> for EspressoShotCreateDto {
 
         EspressoShot::new(
             ksuid.to_string(),
+            self.user_id,
             self.beans,
             self.roaster,
-            self.roast_date.timestamp(),
+            self.roast_date.map(|d| d.timestamp()),
             shot_date,
             self.grind_setting,
             self.weight_in_grams,
@@ -108,24 +112,27 @@ impl Into<EspressoShot> for EspressoShotCreateDto {
 
 impl From<EspressoShot> for EspressoShotViewDto {
     fn from(value: EspressoShot) -> Self {
-        let roast_date = DateTime::from_timestamp(value.get_roast_date(), 0).unwrap();
+        let roast_date = value
+            .get_roast_date()
+            .map(|ts| DateTime::from_timestamp(ts, 0).unwrap());
         let shot_date = DateTime::from_timestamp(value.get_shot_date(), 0).unwrap();
         let updated_at = DateTime::from_timestamp(value.get_updated_at(), 0).unwrap();
 
         EspressoShotViewDto {
             id: value.get_id(),
-            beans: value.get_beans(),
-            roaster: value.get_roaster(),
+            user_id: value.get_user_id(),
+            beans: value.get_beans().clone(),
+            roaster: value.get_roaster().clone(),
             roast_date,
             shot_date,
-            grind_setting: value.get_grind_setting(),
+            grind_setting: value.get_grind_setting().clone(),
             weight_in_grams: value.get_weight_in_grams(),
             weight_out_grams: value.get_weight_out_grams(),
             brew_time_seconds: value.get_brew_time_seconds(),
             rating: value.get_rating(),
             acidity_bitterness: value.get_acidity_bitterness(),
             muddy_watery: value.get_muddy_watery(),
-            notes: value.get_notes(),
+            notes: value.get_notes().clone(),
             updated_at,
         }
     }
@@ -136,6 +143,16 @@ where
     S: Serializer,
 {
     dt.format("%+").to_string().serialize(serializer)
+}
+
+pub fn serialize_dt_opt<S>(dt: &Option<DateTime<Utc>>, serializer: S) -> Result<S::Ok, S::Error>
+where
+    S: Serializer,
+{
+    match dt {
+        Some(d) => d.format("%+").to_string().serialize(serializer),
+        _ => serializer.serialize_none(),
+    }
 }
 
 pub fn deserialize_dt<'de, D>(deserializer: D) -> Result<DateTime<Utc>, D::Error>

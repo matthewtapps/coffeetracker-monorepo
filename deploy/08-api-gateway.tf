@@ -50,9 +50,10 @@ resource "aws_apigatewayv2_stage" "lambda" {
   }
 }
 
-resource "aws_apigatewayv2_deployment" "lambda" {
-  api_id = aws_apigatewayv2_api.lambda.id
-}
+# resource "aws_apigatewayv2_deployment" "lambda" {
+#   api_id     = aws_apigatewayv2_api.lambda.id
+#   depends_on = [aws_apigatewayv2_api.lambda, aws_apigatewayv2_route.post, aws_apigatewayv2_route.get-all, aws_apigatewayv2_route.get-latest, aws_apigatewayv2_route.cors-allow]
+# }
 
 resource "aws_cloudwatch_log_group" "api_gw" {
   name              = "/aws/apigateway/${aws_apigatewayv2_api.lambda.id}"

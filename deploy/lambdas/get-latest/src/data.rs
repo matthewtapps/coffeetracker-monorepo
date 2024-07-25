@@ -8,21 +8,15 @@ use tracing::error;
 pub async fn get_latest_item(
     client: &Client,
     table_name: &str,
+    user_id: &str,
 ) -> Result<EspressoShotViewDto, QueryError> {
     let output = client
         .query()
-        .limit(1)
         .table_name(table_name)
-        .index_name("shot_date_index")
-        .key_condition_expression("shot_date > :rangeKey")
-        .expression_attribute_values(
-            ":rangeKey",
-            AttributeValue::N(
-                (chrono::Utc::now() - chrono::Duration::days(1))
-                    .timestamp()
-                    .to_string(),
-            ),
-        )
+        .scan_index_forward(false)
+        .limit(1)
+        .key_condition_expression("user_id = :user_id")
+        .expression_attribute_values(":user_id", AttributeValue::S(user_id.to_string()))
         .send()
         .await?;
 

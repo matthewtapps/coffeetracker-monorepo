@@ -5,40 +5,43 @@ use super::dto::EspressoShotPutDto;
 #[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct EspressoShot {
     id: String,
-    beans: String,
-    roaster: String,
-    roast_date: i64,
+    user_id: String,
+    beans: Option<String>,
+    roaster: Option<String>,
+    roast_date: Option<i64>,
     shot_date: i64,
-    grind_setting: i32,
+    grind_setting: Option<f32>,
     weight_in_grams: f32,
     weight_out_grams: f32,
     brew_time_seconds: i32,
     rating: i32,
     acidity_bitterness: i32,
     muddy_watery: i32,
-    notes: String,
+    notes: Option<String>,
     updated_at: i64,
 }
 
 impl EspressoShot {
     pub fn new(
         id: String,
-        beans: String,
-        roaster: String,
-        roast_date: i64,
+        user_id: String,
+        beans: Option<String>,
+        roaster: Option<String>,
+        roast_date: Option<i64>,
         shot_date: i64,
-        grind_setting: i32,
+        grind_setting: Option<f32>,
         weight_in_grams: f32,
         weight_out_grams: f32,
         brew_time_seconds: i32,
         rating: i32,
         acidity_bitterness: i32,
         muddy_watery: i32,
-        notes: String,
+        notes: Option<String>,
         updated_at: i64,
     ) -> EspressoShot {
         EspressoShot {
             id,
+            user_id,
             beans,
             roaster,
             roast_date,
@@ -58,7 +61,7 @@ impl EspressoShot {
     pub fn update_from_dto(&mut self, dto: EspressoShotPutDto) {
         self.beans = dto.beans;
         self.roaster = dto.roaster;
-        self.roast_date = dto.roast_date.timestamp();
+        self.roast_date = dto.roast_date.map(|d| d.timestamp());
         self.shot_date = dto.shot_date.timestamp();
         self.grind_setting = dto.grind_setting;
         self.weight_in_grams = dto.weight_in_grams;
@@ -75,24 +78,28 @@ impl EspressoShot {
         String::from(&self.id)
     }
 
-    pub fn get_beans(&self) -> String {
-        String::from(&self.beans)
+    pub fn get_user_id(&self) -> String {
+        String::from(&self.user_id)
     }
 
-    pub fn get_roaster(&self) -> String {
-        String::from(&self.roaster)
+    pub fn get_beans(&self) -> &Option<String> {
+        &self.beans
     }
 
-    pub fn get_roast_date(&self) -> i64 {
-        self.roast_date
+    pub fn get_roaster(&self) -> &Option<String> {
+        &self.roaster
+    }
+
+    pub fn get_roast_date(&self) -> &Option<i64> {
+        &self.roast_date
     }
 
     pub fn get_shot_date(&self) -> i64 {
         self.shot_date
     }
 
-    pub fn get_grind_setting(&self) -> i32 {
-        self.grind_setting
+    pub fn get_grind_setting(&self) -> &Option<f32> {
+        &self.grind_setting
     }
 
     pub fn get_weight_in_grams(&self) -> f32 {
@@ -119,8 +126,8 @@ impl EspressoShot {
         self.muddy_watery
     }
 
-    pub fn get_notes(&self) -> String {
-        String::from(&self.notes)
+    pub fn get_notes(&self) -> &Option<String> {
+        &self.notes
     }
 
     pub fn get_updated_at(&self) -> i64 {

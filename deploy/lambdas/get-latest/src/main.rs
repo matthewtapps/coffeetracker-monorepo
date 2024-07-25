@@ -5,14 +5,36 @@ use aws_sdk_dynamodb::Client;
 use data::get_latest_item;
 use lambda_http::{
     http::{Response, StatusCode},
-    run, service_fn, Error, IntoResponse,
+    run, service_fn, Error, IntoResponse, Request, RequestExt,
 };
 use shared::models::errors::QueryError;
 use tracing::metadata::LevelFilter;
 use tracing_subscriber::{layer::SubscriberExt as _, util::SubscriberInitExt as _, Layer};
 
-async fn handler(table_name: &str, client: &Client) -> Result<impl IntoResponse, Error> {
-    match get_latest_item(client, table_name).await {
+async fn handler(
+    table_name: &str,
+    client: &Client,
+    request: Request,
+) -> Result<impl IntoResponse, Error> {
+    let user_id = request
+        .query_string_parameters_ref()
+        .and_then(|params| params.first("user_id"));
+
+    if user_id.is_none() {
+        let response = Response::builder()
+            .status(StatusCode::BAD_REQUEST)
+            .header("Access-Control-Allow-Headers", "Content-Type")
+            .header(
+                "Access-Control-Allow-Methods",
+                "GET, PUT, DELETE, POST, OPTIONS, PATCH",
+            )
+            .header("Access-Control-Allow-Origin", "*")
+            .body("Missing required parameter: user_id".to_string())
+            .map_err(Box::new)?;
+        return Ok(response);
+    }
+
+    match get_latest_item(client, table_name, user_id.unwrap()).await {
         Ok(found_item) => {
             let response = Response::builder()
                 .status(StatusCode::OK)
@@ -73,5 +95,8 @@ async fn main() -> Result<(), Error> {
     let table_name = "espressoshots";
     let shared_client = &client;
 
-    run(service_fn(move |_| handler(table_name, shared_client))).await
+    run(service_fn(move |event: Request| async move {
+        handler(table_name, shared_client, event).await
+    }))
+    .await
 }

@@ -42,7 +42,7 @@ async fn function_handler(
                 }
             }
         }
-        None => {
+        _ => {
             status_code = StatusCode::BAD_REQUEST;
         }
     }

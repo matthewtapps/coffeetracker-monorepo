@@ -1,24 +1,17 @@
 resource "aws_dynamodb_table" "espressoshots" {
   name         = "espressoshots"
   billing_mode = "PAY_PER_REQUEST"
-  hash_key     = "id"
+  hash_key     = "user_id"
   range_key    = "shot_date"
 
   attribute {
-    name = "id"
+    name = "user_id"
     type = "S"
   }
 
   attribute {
     name = "shot_date"
     type = "N"
-  }
-
-  local_secondary_index {
-    name      = "shot_date_index"
-    range_key = "shot_date"
-
-    projection_type = "ALL"
   }
 
   tags = {

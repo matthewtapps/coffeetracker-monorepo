@@ -146,27 +146,48 @@ EOF
 }
 
 resource "aws_iam_role_policy_attachment" "lambda_policy" {
-  role = aws_iam_role.lambda_exec.name
-
+  role       = aws_iam_role.lambda_exec.name
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
 }
 
-resource "aws_iam_role_policy" "ddb_lambda_policy" {
-  name = "ddb_lambda_policy"
-  role = aws_iam_role.lambda_exec.id
+# resource "aws_iam_role_policy" "ddb_lambda_policy" {
+#   name = "ddb_lambda_policy"
+#   role = aws_iam_role.lambda_exec.id
+#
+#   policy = <<EOF
+# {
+#   "Version": "2012-10-17",
+#   "Statement": [
+#     {
+#       "Effect": "Allow",
+#       "Action": [
+#         "dynamodb:*"
+#       ],
+#       "Resource": "${aws_dynamodb_table.espressoshots.arn}"
+#     }
+#   ]
+# }
+# EOF
+# }
 
-  policy = <<EOF
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Effect": "Allow",
-      "Action": [
-        "dynamodb:*"
-      ],
-      "Resource": "${aws_dynamodb_table.espressoshots.arn}"
-    }
-  ]
+data "aws_iam_policy_document" "lambda_policy_document" {
+  statement {
+    actions = [
+      "dynamodb:*"
+    ]
+    resources = [
+      aws_dynamodb_table.espressoshots.arn,
+      "${aws_dynamodb_table.espressoshots.arn}/index/*"
+    ]
+  }
 }
-EOF
+
+resource "aws_iam_policy" "dynamodb_lambda_policy" {
+  name   = "dynamodb-lambda-policy"
+  policy = data.aws_iam_policy_document.lambda_policy_document.json
+}
+
+resource "aws_iam_role_policy_attachment" "lambda_attachments" {
+  role       = aws_iam_role.lambda_exec.name
+  policy_arn = aws_iam_policy.dynamodb_lambda_policy.arn
 }

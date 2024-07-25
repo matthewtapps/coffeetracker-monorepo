@@ -1,0 +1,27 @@
+  {
+    "beans": "Papua New Guinea",
+    "roaster": "Proud Mary",
+    "roastDate": "2024-07-21T14:00:00.000Z",
+    "shotDate": "2024-07-24T05:21:30.977Z",
+    "grindSetting": 11,
+    "brewTimeSeconds": 23,
+    "acidityBitterness": 1,
+    "muddyWatery": -3,
+    "weightInGrams": 18.1,
+    "weightOutGrams": 44.4,
+    "notes": "Need to grind coarser",
+    "rating": 7
+  }
+    {
+    "beans": "Papua New Guinea",
+    "roaster": "Proud Mary",
+    "roastDate": "2024-04-16T00:00:00.000Z",
+    "grindSetting": 11,
+    "brewTimeSeconds": 23,
+    "acidityBitterness": 1,
+    "muddyWatery": -3,
+    "weightInGrams": 18.1,
+    "weightOutGrams": 43.8,
+    "notes": "",
+    "rating": 3
+  }
