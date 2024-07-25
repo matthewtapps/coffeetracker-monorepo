@@ -20,7 +20,10 @@ async fn handler(
         .and_then(|params| params.first("lk"))
         .unwrap_or("")
         .to_string();
-    let found_items = get_items(client, table_name, 10, last_key).await;
+    let user_id = request
+        .query_string_parameters_ref()
+        .and_then(|params| params.first("user_id"));
+    let found_items = get_items(client, table_name, 10, last_key, user_id.unwrap()).await;
     let response = Response::builder()
         .status(StatusCode::OK)
         .header("Access-Control-Allow-Headers", "Content-Type")

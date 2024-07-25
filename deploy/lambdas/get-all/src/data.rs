@@ -1,3 +1,4 @@
+use aws_sdk_dynamodb::types::AttributeValue;
 use aws_sdk_dynamodb::Client;
 use shared::models::dto::EspressoShotViewDto;
 use shared::models::errors::QueryError;
@@ -11,9 +12,8 @@ pub async fn get_items(
     table_name: &str,
     limit: i32,
     last_key: String,
+    user_id: &str,
 ) -> Result<EspressoShotViewPaginated, QueryError> {
-    let mut key = None;
-
     if !last_key.is_empty() {
         let mut evaluated_key: HashMap<String, aws_sdk_dynamodb::types::AttributeValue> =
             HashMap::new();
@@ -21,14 +21,16 @@ pub async fn get_items(
             "id".to_string(),
             aws_sdk_dynamodb::types::AttributeValue::S(last_key),
         );
-        key = Some(evaluated_key);
+        _ = Some(evaluated_key);
     }
 
     let output = client
-        .scan()
-        .set_exclusive_start_key(key)
-        .limit(limit)
+        .query()
         .table_name(table_name)
+        .scan_index_forward(false)
+        .limit(limit)
+        .key_condition_expression("user_id = :user_ud")
+        .expression_attribute_values(":user_id", AttributeValue::S(user_id.to_string()))
         .send()
         .await?;
 
