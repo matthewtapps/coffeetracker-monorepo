@@ -32,6 +32,7 @@ import { Coffee } from "../coffee-data-table/columns";
 import { useToast } from "../ui/use-toast";
 import { Toaster } from "../ui/toaster";
 import { useAuth } from "@/lib/BasicAuth";
+import { Label } from "@radix-ui/react-label";
 
 const formSchema = z.object({
   beans: z.string().optional(),
@@ -78,6 +79,15 @@ export default function EspressoShotForm({
   });
 
   const [activeTab, setActiveTab] = React.useState("espressoShot");
+  const [ratio, setRatio] = React.useState((form.getValues().weightOutGrams / form.getValues().weightInGrams).toFixed(2))
+
+  const weightInGrams = form.watch("weightInGrams")
+  const weightOutGrams = form.watch("weightOutGrams")
+
+  React.useEffect(() => {
+    const newRatio = (weightOutGrams / weightInGrams).toFixed(2);
+    setRatio(newRatio)
+  }, [weightOutGrams, weightInGrams])
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
@@ -247,7 +257,7 @@ export default function EspressoShotForm({
                     )}
                   />
                 </div>
-                <div className="grid grid-cols-2 gap-3">
+                <div className="grid grid-cols-3 gap-3">
                   <FormField
                     control={form.control}
                     name="weightInGrams"
@@ -294,6 +304,12 @@ export default function EspressoShotForm({
                       </FormItem>
                     )}
                   />
+                  <div className="flex flex-col justify-between">
+                    <Label>Ratio</Label>
+                    <Input
+                      disabled
+                      value={`1 : ${ratio}`}
+                    /></div>
                 </div>
                 <FormField
                   control={form.control}
