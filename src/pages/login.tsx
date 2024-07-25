@@ -30,26 +30,28 @@ export function LoginForm() {
   return (
     <div className="flex z-10 min-h-screen w-full flex-col justify-center pb-32">
       <Card className="flex flex-col z-0 m-3">
-        <CardHeader>
-          <CardTitle className="text-2xl">Login</CardTitle>
-          <CardDescription>
-            Enter your credentials to log in.
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="grid gap-4">
-          <div className="grid gap-2">
-            <Label >Username</Label>
-            <Input id="username" required value={username} onChange={(e) => setUsername(e.target.value)} />
-            {error && <p style={{ color: 'red' }}>{error}</p>}
-          </div>
-          <div className="grid gap-2">
-            <Label htmlFor="password">Password</Label>
-            <Input id="password" required value={password} onChange={(e) => setPassword(e.target.value)} />
-          </div>
-        </CardContent>
-        <CardFooter>
-          <Button className="w-full" onClick={handleLogin}>Sign in</Button>
-        </CardFooter>
+        <form onSubmit={handleLogin}>
+          <CardHeader>
+            <CardTitle className="text-2xl">Login</CardTitle>
+            <CardDescription>
+              Enter your credentials to log in.
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="grid gap-4">
+            <div className="grid gap-2">
+              <Label >Username</Label>
+              <Input id="username" required value={username} onChange={(e) => setUsername(e.target.value)} />
+              {error && <p style={{ color: 'red' }}>{error}</p>}
+            </div>
+            <div className="grid gap-2">
+              <Label htmlFor="password">Password</Label>
+              <Input id="password" type="password" required value={password} onChange={(e) => setPassword(e.target.value)} />
+            </div>
+          </CardContent>
+          <CardFooter>
+            <Button className="w-full" >Sign in</Button>
+          </CardFooter>
+        </form>
       </Card>
     </div>
   )

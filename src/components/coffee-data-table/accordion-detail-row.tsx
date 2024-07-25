@@ -4,45 +4,54 @@ import React from "react";
 
 
 interface AccordionDetailRowProps<TData> {
-    row: Row<TData>
+  row: Row<TData>
 }
 
 export function AccordionDetailRow<TData>({ row }: AccordionDetailRowProps<TData>) {
-    return <div className="flex-col grow [&>*:nth-child(even)]:bg-secondary border-t">
-        {row.getAllCells().map((cell) => {
-            return (
-                <div className="flex grow border-b last:border-b-0 p-1" key={`details-${cell.id}`}>
-                    {cell.column.id === "roaster" ? <RowItem value={flexRender(cell.column.columnDef.cell, cell.getContext())} title="Roaster" />
-                    : cell.column.id === "beans" ? <RowItem value={flexRender(cell.column.columnDef.cell, cell.getContext())} title="Origin" />
-                    : cell.column.id === "roastDate" ? <RowItem value={format(row.getValue("roastDate"), "yyyy/MM/dd")} title="Roast Date" />
-                    : cell.column.id === "shotDate" ? <RowItem value={format(row.getValue("shotDate"), "yyyy/MM/dd")} title="Shot Date" />
-                    : cell.column.id === "grindSetting" ? <RowItem value={flexRender(cell.column.columnDef.cell, cell.getContext())} title="Grind Setting" />
-                    : cell.column.id === "brewTimeSeconds" ? <RowItem value={flexRender(cell.column.columnDef.cell, cell.getContext())} title="Brew Time" />
-                    : cell.column.id === "weightInGrams" ? <RowItem value={flexRender(cell.column.columnDef.cell, cell.getContext())} title="Weight In" />
-                    : cell.column.id === "weightOutGrams" ? <RowItem value={flexRender(cell.column.columnDef.cell, cell.getContext())} title="Weight Out" />
-                    : cell.column.id === "notes" ? <RowItem value={flexRender(cell.column.columnDef.cell, cell.getContext())} title="Notes" />
-                    : cell.column.id === "rating" ? <RowItem value={flexRender(cell.column.columnDef.cell, cell.getContext())} title="Rating" />
-                    : cell.column.id === "acidityBitterness" ? <RowItem value={flexRender(cell.column.columnDef.cell, cell.getContext())} title="Extraction" />
-                    : cell.column.id === "muddyWatery" ? <RowItem value={flexRender(cell.column.columnDef.cell, cell.getContext())} title="Body" />
-                    : cell.column.id === "ratio" && <RowItem value={flexRender(cell.column.columnDef.cell, cell.getContext())} title="Ratio"/>
-                    }
-                </div>
-            )
-        }
-        )}
+  return (
+    <div className="flex-col grow [&>*:nth-child(even)]:bg-secondary border-t">
+      {row.getAllCells().map((cell) => {
+        const value = cell.column.id === "roastDate"
+          ? row.getValue("roastDate") ? format(new Date(row.getValue("roastDate")), "yyyy/MM/dd") : "N/A"
+          : cell.column.id === "shotDate"
+            ? format(new Date(row.getValue("shotDate")), "yyyy/MM/dd")
+            : flexRender(cell.column.columnDef.cell, cell.getContext());
+
+        const title = cell.column.id === "roaster" ? "Roaster"
+          : cell.column.id === "beans" ? "Origin"
+            : cell.column.id === "roastDate" ? "Roast Date"
+              : cell.column.id === "shotDate" ? "Shot Date"
+                : cell.column.id === "grindSetting" ? "Grind Setting"
+                  : cell.column.id === "brewTimeSeconds" ? "Brew Time"
+                    : cell.column.id === "weightInGrams" ? "Weight In"
+                      : cell.column.id === "weightOutGrams" ? "Weight Out"
+                        : cell.column.id === "notes" ? "Notes"
+                          : cell.column.id === "rating" ? "Rating"
+                            : cell.column.id === "acidityBitterness" ? "Extraction"
+                              : cell.column.id === "muddyWatery" ? "Body"
+                                : cell.column.id === "ratio" ? "Ratio"
+                                  : "";
+
+        return (
+          <div className="flex grow border-b last:border-b-0 p-1" key={`details-${cell.id}`}>
+            <RowItem value={value} title={title} />
+          </div>
+        );
+      })}
     </div>
+  );
 }
 
 interface RowItemProps {
-    value: string | JSX.Element | React.ReactNode
-    title: string | JSX.Element | React.ReactNode
+  value: string | JSX.Element | React.ReactNode
+  title: string | JSX.Element | React.ReactNode
 }
 
 function RowItem({ value, title }: RowItemProps) {
-    return (
-        <div className="flex grow">
-            <div className="flex-1 w-max justify-start text-left">{title}</div>
-            <div className="flex-1 w-max justify-end text-right whitespace-pre-wrap pr-3">{value}</div>
-        </div>
-    )
+  return (
+    <div className="flex grow">
+      <div className="flex-1 w-max justify-start text-left">{title}</div>
+      <div className="flex-1 w-max justify-end text-right whitespace-pre-wrap pr-3">{value}</div>
+    </div>
+  )
 }

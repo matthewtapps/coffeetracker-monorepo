@@ -512,7 +512,6 @@ export const dummyData: Coffee[] = [
     userId: "static_user_id",
     beans: "Papua New Guinea",
     roaster: "Proud Mary",
-    roastDate: new Date("2024-04-16"),
     shotDate: new Date("2024-04-27"),
     grindSetting: 11,
     brewTimeSeconds: getRandomBrewTime(),

@@ -6,18 +6,18 @@ import { format } from "date-fns";
 export type Coffee = {
   id: string;
   userId: string;
-  beans: string | undefined;
-  roaster: string | undefined;
-  roastDate: Date | undefined;
+  beans?: string;
+  roaster?: string;
+  roastDate?: Date;
   shotDate: Date;
-  grindSetting: number | undefined;
+  grindSetting?: number;
   brewTimeSeconds: number;
   weightInGrams: number;
   weightOutGrams: number;
   rating: number;
   acidityBitterness: number;
   muddyWatery: number;
-  notes: string | undefined;
+  notes?: string;
   updatedAt: Date;
 };
 
@@ -68,13 +68,14 @@ export const columns: ColumnDef<Coffee>[] = [
       );
     },
     cell: ({ row }) => {
-      const date = new Date(row.getValue("roastDate"));
-      if (!date) {
-        return "No roast date recorded"
+      const roastDate: string | undefined = row.getValue("roastDate");
+      if (roastDate) {
+        const date = new Date(roastDate);
+        const formatted = format(date, "yyyy-MM-dd");
+        return formatted;
+      } else {
+        return "N/A";
       }
-      const formatted = format(date, "yyyy-MM-dd");
-
-      return formatted;
     },
   },
   {
