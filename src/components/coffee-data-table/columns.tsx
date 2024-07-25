@@ -69,6 +69,9 @@ export const columns: ColumnDef<Coffee>[] = [
     },
     cell: ({ row }) => {
       const date = new Date(row.getValue("roastDate"));
+      if (!date) {
+        return "No roast date recorded"
+      }
       const formatted = format(date, "yyyy-MM-dd");
 
       return formatted;

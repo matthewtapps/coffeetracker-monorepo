@@ -29,7 +29,7 @@ pub async fn get_items(
         .table_name(table_name)
         .scan_index_forward(false)
         .limit(limit)
-        .key_condition_expression("user_id = :user_ud")
+        .key_condition_expression("user_id = :user_id")
         .expression_attribute_values(":user_id", AttributeValue::S(user_id.to_string()))
         .send()
         .await?;

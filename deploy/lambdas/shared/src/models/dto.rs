@@ -89,13 +89,14 @@ impl Into<EspressoShot> for EspressoShotCreateDto {
         let dt = Utc::now();
         let timestamp: i64 = dt.timestamp();
         let shot_date: i64 = self.shot_date.unwrap_or_else(|| dt).timestamp();
+        let roast_date = self.roast_date.map(|d| d.timestamp());
 
         EspressoShot::new(
             ksuid.to_string(),
             self.user_id,
             self.beans,
             self.roaster,
-            self.roast_date.map(|d| d.timestamp()),
+            roast_date,
             shot_date,
             self.grind_setting,
             self.weight_in_grams,
