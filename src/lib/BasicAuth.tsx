@@ -22,12 +22,16 @@ interface AuthProviderProps {
 }
 
 const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
-  const [loggedInUserId, setLoggedInUserId] = React.useState<string>("")
+  const [loggedInUserId, setLoggedInUserId] = React.useState<string>(() => {
+    const cachedUser = sessionStorage.getItem('userId')
+    return cachedUser ? JSON.parse(cachedUser) : "";
+  })
 
   const login = (username: string, password: string) => {
     const userId = checkAuth(username, password)
     if (userId !== "") {
       setLoggedInUserId(userId)
+      sessionStorage.setItem('userId', JSON.stringify(userId))
       return true
     }
     return false
@@ -36,6 +40,7 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const logout = async () => {
     try {
       setLoggedInUserId("")
+      sessionStorage.removeItem('userId')
     } catch (e) {
       console.log(e)
     }

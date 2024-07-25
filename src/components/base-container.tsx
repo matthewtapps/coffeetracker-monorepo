@@ -1,4 +1,4 @@
-import { Coffee, Gauge, Rows3, Share } from "lucide-react";
+import { Coffee, Gauge, Rows3, LogOut } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -8,6 +8,7 @@ import {
 } from "@/components/ui/tooltip";
 import { ModeToggle } from "./mode-toggle";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "@/lib/BasicAuth";
 
 interface BaseContainerProps {
   children: React.ReactNode;
@@ -17,6 +18,7 @@ interface BaseContainerProps {
 
 export function BaseContainer({ children, route }: BaseContainerProps) {
   const navigate = useNavigate();
+  const { logout } = useAuth();
 
   return (
     <div className="flex z-10 min-h-screen w-full flex-col">
@@ -77,11 +79,11 @@ export function BaseContainer({ children, route }: BaseContainerProps) {
           <Button
             variant="outline"
             size="sm"
-            disabled
             className="ml-auto gap-1.5 text-sm"
+            onClick={logout}
           >
-            <Share className="size-3.5" />
-            Share
+            <LogOut className="size-3.5" />
+            Logout
           </Button>
         </header>
         <main>{children}</main>
