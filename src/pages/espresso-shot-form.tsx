@@ -2,10 +2,10 @@ import { useGetLatestShotQuery } from "@/app/api/api";
 import { BaseContainer } from "@/components/base-container";
 import EspressoShotForm from "@/components/espresso-shot-form/espresso-shot-form";
 import Spinner from "@/components/loading-spinner";
+import { useAuth } from "@/lib/BasicAuth";
 
 export default function EspressoShotFormPage() {
-  // TODO: Implement real user ID
-  const userId = "static_user_id"
+  const { userId } = useAuth();
   const { data, isLoading, isSuccess } = useGetLatestShotQuery({ userId });
   return (
     <BaseContainer route="shotForm">

@@ -6,11 +6,11 @@ const checkAuth = (username: string, password: string) => {
   if (UserEntity) {
     return UserEntity.userId
   }
-  else return null
+  else return ""
 }
 
 interface AuthContextType {
-  user: string | null;
+  userId: string;
   login: (username: string, password: string) => boolean;
   logout: () => void;
 }
@@ -22,11 +22,11 @@ interface AuthProviderProps {
 }
 
 const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
-  const [loggedInUserId, setLoggedInUserId] = React.useState<string | null>(null)
+  const [loggedInUserId, setLoggedInUserId] = React.useState<string>("")
 
   const login = (username: string, password: string) => {
     const userId = checkAuth(username, password)
-    if (userId) {
+    if (userId !== "") {
       setLoggedInUserId(userId)
       return true
     }
@@ -35,14 +35,14 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   const logout = async () => {
     try {
-      setLoggedInUserId(null)
+      setLoggedInUserId("")
     } catch (e) {
       console.log(e)
     }
   }
 
   return (
-    <AuthContext.Provider value={{ user: loggedInUserId, login, logout }}>
+    <AuthContext.Provider value={{ userId: loggedInUserId, login, logout }}>
       {children}
     </AuthContext.Provider>
   )

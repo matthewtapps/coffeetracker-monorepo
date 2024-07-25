@@ -12,8 +12,8 @@ export const coffeeApi = createApi({
   }),
   tagTypes: ["Coffee", "LatestShot"],
   endpoints: (build) => ({
-    getShots: build.query<Coffee[], void>({
-      query: () => "espressoshots",
+    getShots: build.query<Coffee[], { userId: string }>({
+      query: ({ userId }) => `espressoshots?user_id=${userId}`,
       providesTags: ["Coffee"],
       transformResponse(response: {
         lastEvaluatedKey: string;
@@ -31,7 +31,7 @@ export const coffeeApi = createApi({
       invalidatesTags: ["Coffee", "LatestShot"],
       async onQueryStarted(arg, { dispatch, queryFulfilled }) {
         const patchResult = dispatch(
-          coffeeApi.util.updateQueryData("getShots", undefined, (draft) => {
+          coffeeApi.util.updateQueryData("getShots", { userId: arg.userId || "" }, (draft) => {
             if (draft) {
               draft.unshift({
                 ...(arg as Coffee),

@@ -4,9 +4,11 @@ import { columns } from "@/components/coffee-data-table/columns";
 import { DataTable } from "@/components/coffee-data-table/data-table";
 import { useGetShotsQuery } from "@/app/api/api";
 import Spinner from "@/components/loading-spinner";
+import { useAuth } from "@/lib/BasicAuth";
 
 export default function CoffeeDataTablePage() {
-  const { data, isLoading, isSuccess } = useGetShotsQuery();
+  const { userId } = useAuth();
+  const { data, isLoading, isSuccess } = useGetShotsQuery({ userId });
   const [isDesktop, setDesktop] = React.useState(window.innerWidth > 1350);
 
   const updateMedia = () => {

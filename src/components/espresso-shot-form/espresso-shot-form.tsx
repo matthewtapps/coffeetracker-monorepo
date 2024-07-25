@@ -31,6 +31,7 @@ import { DialogTitle } from "@radix-ui/react-dialog";
 import { Coffee } from "../coffee-data-table/columns";
 import { useToast } from "../ui/use-toast";
 import { Toaster } from "../ui/toaster";
+import { useAuth } from "@/lib/BasicAuth";
 
 const formSchema = z.object({
   beans: z.string().optional(),
@@ -55,6 +56,7 @@ export default function EspressoShotForm({
   latestShot,
 }: EspressoShotFormProps) {
   const { toast } = useToast();
+  const { userId } = useAuth();
   const [postShot, { isLoading: isUpdating }] = useAddShotMutation();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -79,8 +81,6 @@ export default function EspressoShotForm({
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
-      // TODO: Implement real user IDs
-      const userId = "static_user_id"
       await postShot({ ...values, userId }).unwrap();
       form.reset();
       toast({
