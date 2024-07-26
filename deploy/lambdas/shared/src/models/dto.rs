@@ -15,6 +15,7 @@ pub struct EspressoShotViewPaginated {
 pub struct EspressoShotViewDto {
     pub id: String,
     pub user_id: String,
+    pub extraction_method: String,
     pub beans: Option<String>,
     pub roaster: Option<String>,
     #[serde(serialize_with = "serialize_dt_opt")]
@@ -29,6 +30,9 @@ pub struct EspressoShotViewDto {
     pub acidity_bitterness: i32,
     pub muddy_watery: i32,
     pub notes: Option<String>,
+    pub espresso_machine: Option<String>,
+    pub grinder: Option<String>,
+    pub kettle: Option<String>,
     #[serde(serialize_with = "serialize_dt")]
     pub updated_at: DateTime<Utc>,
 }
@@ -38,6 +42,7 @@ pub struct EspressoShotViewDto {
 pub struct EspressoShotCreateDto {
     pub user_id: String,
     pub beans: Option<String>,
+    pub extraction_method: String,
     pub roaster: Option<String>,
     #[serde(deserialize_with = "deserialize_dt_opt", default)]
     pub roast_date: Option<DateTime<Utc>>,
@@ -51,6 +56,9 @@ pub struct EspressoShotCreateDto {
     pub acidity_bitterness: i32,
     pub muddy_watery: i32,
     pub notes: Option<String>,
+    pub espresso_machine: Option<String>,
+    pub grinder: Option<String>,
+    pub kettle: Option<String>,
 }
 
 #[derive(Debug, Deserialize)]
@@ -59,6 +67,7 @@ pub struct EspressoShotPutDto {
     pub id: String,
     pub user_id: String,
     pub beans: Option<String>,
+    pub extraction_method: String,
     pub roaster: Option<String>,
     #[serde(deserialize_with = "deserialize_dt_opt", default)]
     pub roast_date: Option<DateTime<Utc>>,
@@ -72,6 +81,9 @@ pub struct EspressoShotPutDto {
     pub acidity_bitterness: i32,
     pub muddy_watery: i32,
     pub notes: Option<String>,
+    pub espresso_machine: Option<String>,
+    pub grinder: Option<String>,
+    pub kettle: Option<String>,
 }
 
 impl EspressoShotViewPaginated {
@@ -95,6 +107,7 @@ impl Into<EspressoShot> for EspressoShotCreateDto {
             ksuid.to_string(),
             self.user_id,
             self.beans,
+            self.extraction_method,
             self.roaster,
             roast_date,
             shot_date,
@@ -106,6 +119,9 @@ impl Into<EspressoShot> for EspressoShotCreateDto {
             self.acidity_bitterness,
             self.muddy_watery,
             self.notes,
+            self.espresso_machine,
+            self.grinder,
+            self.kettle,
             timestamp,
         )
     }
@@ -123,6 +139,7 @@ impl From<EspressoShot> for EspressoShotViewDto {
             id: value.get_id(),
             user_id: value.get_user_id(),
             beans: value.get_beans().clone(),
+            extraction_method: value.get_extraction_method().clone(),
             roaster: value.get_roaster().clone(),
             roast_date,
             shot_date,
@@ -134,6 +151,9 @@ impl From<EspressoShot> for EspressoShotViewDto {
             acidity_bitterness: value.get_acidity_bitterness(),
             muddy_watery: value.get_muddy_watery(),
             notes: value.get_notes().clone(),
+            espresso_machine: value.get_espresso_machine().clone(),
+            grinder: value.get_grinder().clone(),
+            kettle: value.get_kettle().clone(),
             updated_at,
         }
     }

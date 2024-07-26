@@ -12,6 +12,10 @@ pub async fn create_item(
         .item("id".to_string(), AttributeValue::S(item.get_id()))
         .item("user_id".to_string(), AttributeValue::S(item.get_user_id()))
         .item(
+            "extraction_method".to_string(),
+            AttributeValue::S(item.get_extraction_method()),
+        )
+        .item(
             "shot_date".to_string(),
             AttributeValue::N(item.get_shot_date().to_string()),
         )
@@ -68,6 +72,21 @@ pub async fn create_item(
 
     if let Some(notes) = item.get_notes() {
         request = request.item("notes".to_string(), AttributeValue::S(notes.clone()));
+    }
+
+    if let Some(espresso_machine) = item.get_espresso_machine() {
+        request = request.item(
+            "espresso_machine".to_string(),
+            AttributeValue::S(espresso_machine.clone()),
+        );
+    }
+
+    if let Some(grinder) = item.get_grinder() {
+        request = request.item("grinder".to_string(), AttributeValue::S(grinder.clone()));
+    }
+
+    if let Some(kettle) = item.get_kettle() {
+        request = request.item("kettle".to_string(), AttributeValue::S(kettle.clone()));
     }
 
     match request.table_name(table_name).send().await {

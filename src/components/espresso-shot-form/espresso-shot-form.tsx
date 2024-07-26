@@ -24,7 +24,7 @@ import { format } from "date-fns";
 import { CalendarIcon } from "lucide-react";
 import { Calendar } from "../ui/calendar";
 import { Slider } from "@/components/ui/sliderSelector";
-import { useAddShotMutation } from "@/app/api/api";
+import { useAddShotMutation, useGetShotsQuery } from "@/app/api/api";
 import { Dialog, DialogContent } from "../ui/dialog";
 import Spinner from "../loading-spinner";
 import { DialogTitle } from "@radix-ui/react-dialog";
@@ -33,9 +33,11 @@ import { useToast } from "../ui/use-toast";
 import { Toaster } from "../ui/toaster";
 import { useAuth } from "@/lib/BasicAuth";
 import { Label } from "@radix-ui/react-label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
 
 const formSchema = z.object({
   beans: z.string().optional(),
+  extractionMethod: z.string().min(0, "Please enter a valid extraction method"),
   roaster: z.string().optional(),
   roastDate: z.date().optional(),
   shotDate: z.date().optional(),
@@ -46,6 +48,9 @@ const formSchema = z.object({
   weightInGrams: z.number().min(0, "Please enter a valid weight"),
   weightOutGrams: z.number().min(0, "Please enter a valid weight"),
   notes: z.string().optional(),
+  espressoMachine: z.string().optional(),
+  grinder: z.string().optional(),
+  kettle: z.string().optional(),
   rating: z.number(),
 });
 
@@ -62,8 +67,9 @@ export default function EspressoShotForm({
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      beans: latestShot?.beans || "",
-      roaster: latestShot?.roaster || "",
+      beans: latestShot?.beans,
+      extractionMethod: latestShot?.extractionMethod || "Espresso",
+      roaster: latestShot?.roaster,
       roastDate: latestShot?.roastDate ? new Date(latestShot.roastDate) : undefined,
       grindSetting: latestShot?.grindSetting || undefined,
       brewTimeSeconds: latestShot?.brewTimeSeconds || 30,
@@ -72,7 +78,9 @@ export default function EspressoShotForm({
       weightInGrams: latestShot?.weightInGrams || 18,
       weightOutGrams: latestShot?.weightOutGrams || 36,
       rating: latestShot?.rating || 5,
-      notes: "",
+      espressoMachine: latestShot?.extractionMethod === "Espresso" ? latestShot?.espressoMachine : undefined,
+      grinder: latestShot?.grinder,
+      kettle: latestShot?.extractionMethod === "Pourover" ? latestShot?.grinder : undefined,
     },
     mode: "onSubmit",
     reValidateMode: "onBlur",
@@ -114,6 +122,9 @@ export default function EspressoShotForm({
   const [roastDateEditable, editRoastDate] = React.useState(
     !latestShot?.roastDate,
   );
+  const [espressoMachineEditable, editEspressoMachine] = React.useState(!latestShot?.espressoMachine)
+  const [grinderEditable, editGrinder] = React.useState(!latestShot?.grinder)
+  const [kettleEditable, editKettle] = React.useState(!latestShot?.kettle)
 
   React.useEffect(() => {
     const errors = form.formState.errors;
@@ -141,8 +152,15 @@ export default function EspressoShotForm({
     formSelectHandler(dateWithTime)
   };
 
+  const { data: allUserShots, isLoading, isSuccess } = useGetShotsQuery({ userId });
+  const [extractionMethods, setExtractionMethods] = React.useState(['Espresso', 'Pourover'])
+
+  React.useEffect(() => {
+    setExtractionMethods((!isLoading && isSuccess) ? [...new Set(allUserShots.map((s) => s.extractionMethod).concat(['Espresso', 'Pourover', 'Aeropress', 'Percolator', 'Immersion']))] : ['Espresso', 'Pourover', 'Aeropress', 'Percolator', 'Immersion'])
+  }, [allUserShots])
+
   return (
-    <div className="m-3">
+    <div className="m-3 max-w-3xl align-self-center justify-self-center">
       <Tabs value={activeTab} onValueChange={setActiveTab}>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3">
@@ -206,6 +224,28 @@ export default function EspressoShotForm({
                           />
                         </PopoverContent>
                       </Popover>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="extractionMethod"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Extraction Method</FormLabel>
+                      <FormControl>
+                        <Select onValueChange={field.onChange} defaultValue={field.value}>
+                          <FormControl>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Select a verified email to display" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            {extractionMethods.map((m) => <SelectItem key={m} value={m}>{m}</SelectItem>)}
+                          </SelectContent>
+                        </Select>
+                      </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
@@ -541,7 +581,109 @@ export default function EspressoShotForm({
                 />
               </TabsContent>
               <TabsContent value="equipment" className="space-y-2">
-                <h1>TBD</h1>
+                <FormField
+                  control={form.control}
+                  name="espressoMachine"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Espresso Machine</FormLabel>
+                      <FormControl>
+                        <div className="flex space-x-3">
+                          <Input
+                            placeholder="Bean Origin"
+                            disabled={!espressoMachineEditable}
+                            {...field}
+                          />
+                          <Button
+                            type="button"
+                            variant="default"
+                            onClick={() => {
+                              editEspressoMachine(true);
+                              setTimeout(
+                                () =>
+                                  form.setFocus("espressoMachine", {
+                                    shouldSelect: true,
+                                  }),
+                                10,
+                              );
+                            }}
+                          >
+                            New
+                          </Button>
+                        </div>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="grinder"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Grinder</FormLabel>
+                      <FormControl>
+                        <div className="flex space-x-3">
+                          <Input
+                            disabled={!grinderEditable}
+                            {...field}
+                          />
+                          <Button
+                            type="button"
+                            variant="default"
+                            onClick={() => {
+                              editGrinder(true);
+                              setTimeout(
+                                () =>
+                                  form.setFocus("grinder", {
+                                    shouldSelect: true,
+                                  }),
+                                10,
+                              );
+                            }}
+                          >
+                            New
+                          </Button>
+                        </div>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="kettle"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Kettle</FormLabel>
+                      <FormControl>
+                        <div className="flex space-x-3">
+                          <Input
+                            disabled={!kettleEditable}
+                            {...field}
+                          />
+                          <Button
+                            type="button"
+                            variant="default"
+                            onClick={() => {
+                              editKettle(true);
+                              setTimeout(
+                                () =>
+                                  form.setFocus("kettle", {
+                                    shouldSelect: true,
+                                  }),
+                                10,
+                              );
+                            }}
+                          >
+                            New
+                          </Button>
+                        </div>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
               </TabsContent>
               <Button className="flex-grow mt-3" type="submit">
                 Submit
