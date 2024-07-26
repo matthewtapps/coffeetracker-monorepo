@@ -6,4 +6,5 @@ export default [
   { username: "em", password: "empassword", userId: "emid" },
   { username: "shane", password: "shanepassword", userId: "shaneid" },
   { username: "brendan", password: "brendanpassword", userId: "brendanid" },
+  { username: "josh", password: "joshpassword", userId: "joshid" },
 ]

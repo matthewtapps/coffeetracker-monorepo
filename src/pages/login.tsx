@@ -29,7 +29,7 @@ export function LoginForm() {
 
   return (
     <div className="flex z-10 min-h-screen w-full flex-col justify-center pb-32">
-      <Card className="flex flex-col z-0 m-3">
+      <Card className="flex flex-col z-0 m-3 w-4/12 min-w-fit self-center">
         <form onSubmit={handleLogin}>
           <CardHeader>
             <CardTitle className="text-2xl">Login</CardTitle>
