@@ -9,7 +9,7 @@ interface AccordionDetailRowProps<TData> {
 
 export function AccordionDetailRow<TData>({ row }: AccordionDetailRowProps<TData>) {
   return (
-    <div className="flex-col grow [&>*:nth-child(even)]:bg-secondary border-t">
+    <div className="flex-col grow [&>*:nth-child(even)]:bg-secondary border-t text-wrap">
       {row.getAllCells().map((cell) => {
         const value = cell.column.id === "roastDate"
           ? row.getValue("roastDate") ? format(new Date(row.getValue("roastDate")), "yyyy/MM/dd") : "N/A"
@@ -50,8 +50,8 @@ interface RowItemProps {
 function RowItem({ value, title }: RowItemProps) {
   return (
     <div className="flex grow">
-      <div className="flex-1 w-max justify-start text-left">{title}</div>
-      <div className="flex-1 w-max justify-end text-right whitespace-pre-wrap pr-3">{value}</div>
+      <div className="justify-start text-left">{title}</div>
+      <div className="flex-1 justify-end text-right whitespace-pre-wrap pr-3 pl-8">{value}</div>
     </div>
   )
 }
