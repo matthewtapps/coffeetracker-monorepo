@@ -22,6 +22,7 @@ export type Coffee = {
   espressoMachine?: string;
   grinder?: string;
   kettle?: string;
+  dripper?: string;
   updatedAt: Date;
 };
 

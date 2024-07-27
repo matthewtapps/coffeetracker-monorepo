@@ -33,6 +33,7 @@ pub struct EspressoShotViewDto {
     pub espresso_machine: Option<String>,
     pub grinder: Option<String>,
     pub kettle: Option<String>,
+    pub dripper: Option<String>,
     #[serde(serialize_with = "serialize_dt")]
     pub updated_at: DateTime<Utc>,
 }
@@ -59,6 +60,7 @@ pub struct EspressoShotCreateDto {
     pub espresso_machine: Option<String>,
     pub grinder: Option<String>,
     pub kettle: Option<String>,
+    pub dripper: Option<String>,
 }
 
 #[derive(Debug, Deserialize)]
@@ -84,6 +86,7 @@ pub struct EspressoShotPutDto {
     pub espresso_machine: Option<String>,
     pub grinder: Option<String>,
     pub kettle: Option<String>,
+    pub dripper: Option<String>,
 }
 
 impl EspressoShotViewPaginated {
@@ -122,6 +125,7 @@ impl Into<EspressoShot> for EspressoShotCreateDto {
             self.espresso_machine,
             self.grinder,
             self.kettle,
+            self.dripper,
             timestamp,
         )
     }
@@ -154,6 +158,7 @@ impl From<EspressoShot> for EspressoShotViewDto {
             espresso_machine: value.get_espresso_machine().clone(),
             grinder: value.get_grinder().clone(),
             kettle: value.get_kettle().clone(),
+            dripper: value.get_dripper().clone(),
             updated_at,
         }
     }

@@ -22,6 +22,7 @@ pub struct EspressoShot {
     espresso_machine: Option<String>,
     grinder: Option<String>,
     kettle: Option<String>,
+    dripper: Option<String>,
     updated_at: i64,
 }
 
@@ -45,6 +46,7 @@ impl EspressoShot {
         espresso_machine: Option<String>,
         grinder: Option<String>,
         kettle: Option<String>,
+        dripper: Option<String>,
         updated_at: i64,
     ) -> EspressoShot {
         EspressoShot {
@@ -66,6 +68,7 @@ impl EspressoShot {
             espresso_machine,
             grinder,
             kettle,
+            dripper,
             updated_at,
         }
     }
@@ -87,13 +90,13 @@ impl EspressoShot {
         self.espresso_machine = dto.espresso_machine;
         self.grinder = dto.grinder;
         self.kettle = dto.kettle;
+        self.dripper = dto.dripper;
         self.updated_at = chrono::Utc::now().timestamp();
     }
 
     pub fn get_id(&self) -> String {
         String::from(&self.id)
     }
-
     pub fn get_user_id(&self) -> String {
         String::from(&self.user_id)
     }
@@ -160,6 +163,10 @@ impl EspressoShot {
 
     pub fn get_kettle(&self) -> &Option<String> {
         &self.kettle
+    }
+
+    pub fn get_dripper(&self) -> &Option<String> {
+        &self.dripper
     }
 
     pub fn get_updated_at(&self) -> i64 {

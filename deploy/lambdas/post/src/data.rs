@@ -89,6 +89,10 @@ pub async fn create_item(
         request = request.item("kettle".to_string(), AttributeValue::S(kettle.clone()));
     }
 
+    if let Some(dripper) = item.get_dripper() {
+        request = request.item("dripper".to_string(), AttributeValue::S(dripper.clone()));
+    }
+
     match request.table_name(table_name).send().await {
         Ok(_) => Ok(item),
         Err(e) => Err(e.into()),

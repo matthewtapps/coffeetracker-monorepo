@@ -587,7 +587,7 @@ export const dummyData: Coffee[] = [
     weightInGrams: getRandomWeightIn(),
     weightOutGrams: getRandomWeightOut(),
     rating: getRandomRating(),
-    notes: "Toasted almond flavor",
+    notes: "Somehow the ratio is short despite grinding finer and brew time being way longer \n Oh well last shot from these beans ",
     espressoMachine: "Gaggia Classic Pro",
     grinder: "Mazzer Mini Electric B",
     acidityBitterness: -3,

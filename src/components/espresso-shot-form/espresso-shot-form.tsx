@@ -27,8 +27,7 @@ import { Slider } from "@/components/ui/sliderSelector";
 import { useAddShotMutation, useGetShotsQuery } from "@/app/api/api";
 import { Dialog, DialogContent } from "../ui/dialog";
 import Spinner from "../loading-spinner";
-import { DialogTitle } from "@radix-ui/react-dialog";
-import { Coffee } from "../coffee-data-table/columns";
+import { DialogTitle } from "@radix-ui/react-dialog"; import { Coffee } from "../coffee-data-table/columns";
 import { useToast } from "../ui/use-toast";
 import { Toaster } from "../ui/toaster";
 import { useAuth } from "@/lib/BasicAuth";
@@ -51,6 +50,7 @@ const formSchema = z.object({
   espressoMachine: z.string().optional(),
   grinder: z.string().optional(),
   kettle: z.string().optional(),
+  dripper: z.string().optional(),
   rating: z.number(),
 });
 
@@ -80,7 +80,8 @@ export default function EspressoShotForm({
       rating: latestShot?.rating || 5,
       espressoMachine: latestShot?.extractionMethod === "Espresso" ? latestShot?.espressoMachine : undefined,
       grinder: latestShot?.grinder,
-      kettle: latestShot?.extractionMethod === "Pourover" ? latestShot?.grinder : undefined,
+      kettle: latestShot?.extractionMethod === "Pourover" ? latestShot?.kettle : undefined,
+      dripper: latestShot?.extractionMethod === "Pourover" ? latestShot?.dripper : undefined,
     },
     mode: "onSubmit",
     reValidateMode: "onBlur",
@@ -125,6 +126,7 @@ export default function EspressoShotForm({
   const [espressoMachineEditable, editEspressoMachine] = React.useState(!latestShot?.espressoMachine)
   const [grinderEditable, editGrinder] = React.useState(!latestShot?.grinder)
   const [kettleEditable, editKettle] = React.useState(!latestShot?.kettle)
+  const [dripperEditable, editDripper] = React.useState(!latestShot?.dripper)
 
   React.useEffect(() => {
     const errors = form.formState.errors;
@@ -156,7 +158,7 @@ export default function EspressoShotForm({
   const [extractionMethods, setExtractionMethods] = React.useState(['Espresso', 'Pourover'])
 
   React.useEffect(() => {
-    setExtractionMethods((!isLoading && isSuccess) ? [...new Set(allUserShots.map((s) => s.extractionMethod).concat(['Espresso', 'Pourover', 'Aeropress', 'Percolator', 'Immersion']))] : ['Espresso', 'Pourover', 'Aeropress', 'Percolator', 'Immersion'])
+    setExtractionMethods((!isLoading && isSuccess) ? [...new Set(allUserShots.map((s) => s.extractionMethod).concat(['Espresso', 'Pourover']))] : ['Espresso', 'Pourover',])
   }, [allUserShots])
 
   return (
@@ -178,10 +180,11 @@ export default function EspressoShotForm({
                     <FormItem className="flex flex-col">
                       <FormLabel>Shot Date</FormLabel>
                       <Popover>
-                        <div className="flex space-x-2">
-                          <FormControl>
-                            <PopoverTrigger asChild>
+                        <FormControl>
+                          <PopoverTrigger asChild>
+                            <div className="flex space-x-2">
                               <Button
+                                type="button"
                                 variant={"outline"}
                                 disabled={!shotDateEditable}
                                 className={cn(
@@ -195,21 +198,18 @@ export default function EspressoShotForm({
                                 )}
                                 <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
                               </Button>
-                            </PopoverTrigger>
-                          </FormControl>
-                          <Button
-                            type="button"
-                            variant="default"
-                            onClick={() => {
-                              editShotDate(true);
-                              form.setFocus("shotDate", {
-                                shouldSelect: true,
-                              });
-                            }}
-                          >
-                            Edit
-                          </Button>
-                        </div>
+                              <Button
+                                type="button"
+                                variant="default"
+                                onClick={() => {
+                                  editShotDate(true);
+                                }}
+                              >
+                                Edit
+                              </Button>
+                            </div>
+                          </PopoverTrigger>
+                        </FormControl>
                         <PopoverContent className="w-auto p-0" align="start">
                           <Calendar
                             mode="single"
@@ -238,7 +238,7 @@ export default function EspressoShotForm({
                         <Select onValueChange={field.onChange} defaultValue={field.value}>
                           <FormControl>
                             <SelectTrigger>
-                              <SelectValue placeholder="Select a verified email to display" />
+                              <SelectValue />
                             </SelectTrigger>
                           </FormControl>
                           <SelectContent>
@@ -265,7 +265,6 @@ export default function EspressoShotForm({
                                 field.onChange(e.target.valueAsNumber);
                               }
                             }}
-                            placeholder="Grind Setting"
                             type="number"
                             step="0.1"
                           />
@@ -288,7 +287,6 @@ export default function EspressoShotForm({
                                 field.onChange(e.target.valueAsNumber);
                               }
                             }}
-                            placeholder="Brew Time (s)"
                             type="number"
                           />
                         </FormControl>
@@ -312,7 +310,6 @@ export default function EspressoShotForm({
                                 field.onChange(e.target.valueAsNumber);
                               }
                             }}
-                            placeholder="Weight In (g)"
                             type="number"
                             step="0.1"
                           />
@@ -335,7 +332,6 @@ export default function EspressoShotForm({
                                 field.onChange(e.target.valueAsNumber);
                               }
                             }}
-                            placeholder="Weight Out (g)"
                             type="number"
                             step="0.1"
                           />
@@ -460,7 +456,7 @@ export default function EspressoShotForm({
                       <FormControl>
                         <div className="flex space-x-3">
                           <Input
-                            placeholder="Bean Origin"
+                            type="search"
                             disabled={!beanOriginEditable}
                             {...field}
                           />
@@ -495,7 +491,7 @@ export default function EspressoShotForm({
                       <FormControl>
                         <div className="flex space-x-3">
                           <Input
-                            placeholder="Roaster"
+                            type="search"
                             disabled={!roasterEditable}
                             {...field}
                           />
@@ -528,9 +524,9 @@ export default function EspressoShotForm({
                     <FormItem className="flex flex-col">
                       <FormLabel>Roast Date</FormLabel>
                       <Popover>
-                        <div className="flex space-x-2">
-                          <FormControl>
-                            <PopoverTrigger asChild>
+                        <FormControl>
+                          <PopoverTrigger asChild>
+                            <div className="flex space-x-2">
                               <Button
                                 type="button"
                                 disabled={!roastDateEditable}
@@ -546,21 +542,21 @@ export default function EspressoShotForm({
                                 )}
                                 <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
                               </Button>
-                            </PopoverTrigger>
-                          </FormControl>
-                          <Button
-                            type="button"
-                            variant="default"
-                            onClick={() => {
-                              editRoastDate(true);
-                              form.setFocus("roastDate", {
-                                shouldSelect: true,
-                              });
-                            }}
-                          >
-                            New
-                          </Button>
-                        </div>
+                              <Button
+                                type="button"
+                                variant="default"
+                                onClick={() => {
+                                  editRoastDate(true);
+                                  form.setFocus("roastDate", {
+                                    shouldSelect: true,
+                                  });
+                                }}
+                              >
+                                New
+                              </Button>
+                            </div>
+                          </PopoverTrigger>
+                        </FormControl>
                         <PopoverContent className="w-auto p-0" align="start">
                           <Calendar
                             mode="single"
@@ -581,7 +577,7 @@ export default function EspressoShotForm({
                 />
               </TabsContent>
               <TabsContent value="equipment" className="space-y-2">
-                <FormField
+                {form.getValues("extractionMethod") === "Espresso" && <FormField
                   control={form.control}
                   name="espressoMachine"
                   render={({ field }) => (
@@ -590,7 +586,7 @@ export default function EspressoShotForm({
                       <FormControl>
                         <div className="flex space-x-3">
                           <Input
-                            placeholder="Bean Origin"
+                            type="search"
                             disabled={!espressoMachineEditable}
                             {...field}
                           />
@@ -615,7 +611,7 @@ export default function EspressoShotForm({
                       <FormMessage />
                     </FormItem>
                   )}
-                />
+                />}
                 <FormField
                   control={form.control}
                   name="grinder"
@@ -625,6 +621,7 @@ export default function EspressoShotForm({
                       <FormControl>
                         <div className="flex space-x-3">
                           <Input
+                            type="search"
                             disabled={!grinderEditable}
                             {...field}
                           />
@@ -650,7 +647,7 @@ export default function EspressoShotForm({
                     </FormItem>
                   )}
                 />
-                <FormField
+                {form.getValues("extractionMethod") === "Pourover" && <FormField
                   control={form.control}
                   name="kettle"
                   render={({ field }) => (
@@ -659,6 +656,7 @@ export default function EspressoShotForm({
                       <FormControl>
                         <div className="flex space-x-3">
                           <Input
+                            type="search"
                             disabled={!kettleEditable}
                             {...field}
                           />
@@ -683,7 +681,42 @@ export default function EspressoShotForm({
                       <FormMessage />
                     </FormItem>
                   )}
-                />
+                />}
+                {form.getValues("extractionMethod") === "Pourover" && <FormField
+                  control={form.control}
+                  name="dripper"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Dripper</FormLabel>
+                      <FormControl>
+                        <div className="flex space-x-3">
+                          <Input
+                            type="search"
+                            disabled={!dripperEditable}
+                            {...field}
+                          />
+                          <Button
+                            type="button"
+                            variant="default"
+                            onClick={() => {
+                              editDripper(true);
+                              setTimeout(
+                                () =>
+                                  form.setFocus("dripper", {
+                                    shouldSelect: true,
+                                  }),
+                                10,
+                              );
+                            }}
+                          >
+                            New
+                          </Button>
+                        </div>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />}
               </TabsContent>
               <Button className="flex-grow mt-3" type="submit">
                 Submit
