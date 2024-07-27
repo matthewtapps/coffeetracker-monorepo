@@ -87,7 +87,7 @@ export default function EspressoShotForm({
     reValidateMode: "onBlur",
   });
 
-  const [activeTab, setActiveTab] = React.useState("espressoShot");
+  const [activeTab, setActiveTab] = React.useState("extraction");
   const [ratio, setRatio] = React.useState((form.getValues().weightOutGrams / form.getValues().weightInGrams).toFixed(2))
 
   const weightInGrams = form.watch("weightInGrams")
@@ -98,6 +98,14 @@ export default function EspressoShotForm({
     setRatio(newRatio)
   }, [weightOutGrams, weightInGrams])
 
+  const extractionMethod = form.watch("extractionMethod")
+
+  React.useEffect(() => {
+    form.setValue("kettle", form.getValues("extractionMethod") === "Pourover" ? latestShot?.kettle || undefined : undefined)
+    form.setValue("dripper", form.getValues("extractionMethod") === "Pourover" ? latestShot?.dripper || undefined : undefined)
+    form.setValue("espressoMachine", form.getValues("extractionMethod") === "Espresso" ? latestShot?.espressoMachine || undefined : undefined)
+  }, [extractionMethod])
+
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
       await postShot({ ...values, userId }).unwrap();
@@ -106,6 +114,14 @@ export default function EspressoShotForm({
         title: "Success!",
         description: "Espresso shot recorded",
       });
+      editShotDate(false)
+      editBeanOrigin(!latestShot?.beans)
+      editRoaster(!latestShot?.roaster)
+      editRoastDate(!latestShot?.roastDate)
+      editEspressoMachine(!latestShot?.espressoMachine)
+      editGrinder(!latestShot?.grinder)
+      editKettle(!latestShot?.kettle)
+      editDripper(!latestShot?.dripper)
     } catch (error) {
       toast({
         title: "Error",
@@ -132,8 +148,10 @@ export default function EspressoShotForm({
     const errors = form.formState.errors;
     if (errors.beans || errors.roaster || errors.roastDate) {
       setActiveTab("beans");
-    } else {
-      setActiveTab("espressoShot");
+    } else if (errors.espressoMachine || errors.dripper || errors.kettle || errors.grinder) {
+      setActiveTab("equipment");
+    } else if (errors.shotDate || errors.extractionMethod || errors.grindSetting || errors.brewTimeSeconds || errors.weightInGrams || errors.weightOutGrams || errors.acidityBitterness || errors.muddyWatery || errors.rating || errors.notes) {
+      setActiveTab("extraction");
     }
   }, [form.formState.errors]);
 
@@ -168,11 +186,11 @@ export default function EspressoShotForm({
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3">
             <div className="flex flex-col">
               <TabsList className="grid w-full grid-cols-3">
-                <TabsTrigger value="espressoShot">Espresso Shot</TabsTrigger>
+                <TabsTrigger value="extraction">Extraction</TabsTrigger>
                 <TabsTrigger value="beans">Beans</TabsTrigger>
                 <TabsTrigger value="equipment">Equipment</TabsTrigger>
               </TabsList>
-              <TabsContent value="espressoShot" className="space-y-2">
+              <TabsContent value="extraction" className="space-y-2">
                 <FormField
                   control={form.control}
                   name="shotDate"
