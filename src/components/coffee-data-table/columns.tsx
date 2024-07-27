@@ -7,6 +7,7 @@ export type Coffee = {
   id: string;
   userId: string;
   beans?: string;
+  extractionMethod: string;
   roaster?: string;
   roastDate?: Date;
   shotDate: Date;
@@ -18,6 +19,10 @@ export type Coffee = {
   acidityBitterness: number;
   muddyWatery: number;
   notes?: string;
+  espressoMachine?: string;
+  grinder?: string;
+  kettle?: string;
+  dripper?: string;
   updatedAt: Date;
 };
 
