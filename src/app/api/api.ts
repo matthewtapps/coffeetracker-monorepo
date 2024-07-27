@@ -28,9 +28,8 @@ export const coffeeApi = createApi({
         method: "POST",
         body,
       }),
-      invalidatesTags: ["Coffee", "LatestShot"],
       async onQueryStarted(arg, { dispatch, queryFulfilled }) {
-        const patchResult = dispatch(
+        const patchResultAllShots = dispatch(
           coffeeApi.util.updateQueryData("getShots", { userId: arg.userId || "" }, (draft) => {
             if (draft) {
               draft.unshift({
@@ -41,10 +40,22 @@ export const coffeeApi = createApi({
             }
           }),
         );
+        const patchResultLatestShot = dispatch(
+          coffeeApi.util.updateQueryData("getLatestShot", { userId: arg.userId || "" }, (draft) => {
+            if (draft) {
+              draft = {
+                ...(arg as Coffee),
+                id: "",
+                updatedAt: new Date(),
+              };
+            }
+          }),
+        );
         try {
           await queryFulfilled;
         } catch {
-          patchResult.undo();
+          patchResultAllShots.undo();
+          patchResultLatestShot.undo();
         }
       },
     }),
