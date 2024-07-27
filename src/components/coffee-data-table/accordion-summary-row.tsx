@@ -18,7 +18,7 @@ interface AccordionSummaryRowProps<TData> {
 }
 
 export function AccordionSummaryRow<TData>({ row }: AccordionSummaryRowProps<TData>) {
-  return <div className="grid grid-cols-5" key={`summary-${row.id}`}>
+  return <div className="grid grid-cols-5 w-full" key={`summary-${row.id}`}>
     {row.getAllCells().map((cell) => {
       if (SUMMARY_DATA.includes(cell.column.id)) {
         return (
@@ -45,7 +45,7 @@ interface RowItemProps {
 
 function RowItem({ value, title }: RowItemProps) {
   return (
-    <div className="flex justify-start">
+    <div className="flex">
       {title}{value}
     </div>
   )
