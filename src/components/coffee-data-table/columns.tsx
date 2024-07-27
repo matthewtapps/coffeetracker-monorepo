@@ -26,6 +26,7 @@ export type Coffee = {
   updatedAt: Date;
 };
 
+// TODO: Add accessors for equipment and brew method
 export const columns: ColumnDef<Coffee>[] = [
   {
     accessorKey: "shotDate",

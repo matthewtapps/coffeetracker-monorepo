@@ -17,6 +17,7 @@ export function AccordionDetailRow<TData>({ row }: AccordionDetailRowProps<TData
             ? format(new Date(row.getValue("shotDate")), "yyyy/MM/dd")
             : flexRender(cell.column.columnDef.cell, cell.getContext());
 
+        // TODO: Add equipment and brew method to summary rows
         const title = cell.column.id === "roaster" ? "Roaster"
           : cell.column.id === "beans" ? "Origin"
             : cell.column.id === "roastDate" ? "Roast Date"
